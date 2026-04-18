@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::dropIfExists('kuesioners');
         Schema::create('kuesioners', function (Blueprint $table) {
             $table->id();
             $table->string('nama_responden');
