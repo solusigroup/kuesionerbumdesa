@@ -192,6 +192,7 @@
                             <th>Waktu Submit</th>
                             <th>Email Responden</th>
                             <th>Nama Responden</th>
+                            <th>Desa / Kec.</th>
                             <th>BUMDesa</th>
                             <th>Jabatan</th>
                             <th>Total Skor</th>
@@ -212,6 +213,9 @@
                                 <a href="{{ route('admin.show', $k->id) }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">
                                     {{ $k->nama_responden }}
                                 </a>
+                            </td>
+                            <td style="font-size: 0.8rem; color: var(--text-light);">
+                                {{ $k->nama_desa }} / {{ $k->kecamatan }}
                             </td>
                             <td>{{ $k->nama_bumdesa }}</td>
                             <td>{{ $k->jabatan }}</td>

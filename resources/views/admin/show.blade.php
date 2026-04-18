@@ -143,11 +143,15 @@
             <div class="section-title">I. Profil Responden</div>
             <div class="grid-info">
                 <div class="info-item"><label>Nama Responden</label><span>{{ $kuesioner->nama_responden }}</span></div>
+                <div class="info-item"><label>Nomor WhatsApp</label><span>{{ $kuesioner->nomor_wa }}</span></div>
+                <div class="info-item"><label>Email BUMDesa</label><span>{{ $kuesioner->email_bumdesa }}</span></div>
                 <div class="info-item"><label>Email Akun</label><span>{{ $kuesioner->user->email ?? '-' }}</span></div>
                 <div class="info-item"><label>Jenis Kelamin</label><span>{{ $kuesioner->jenis_kelamin }}</span></div>
                 <div class="info-item"><label>Usia</label><span>{{ $kuesioner->usia }} Tahun</span></div>
                 <div class="info-item"><label>Jabatan</label><span>{{ $kuesioner->jabatan }}</span></div>
                 <div class="info-item"><label>Nama BUMDesa</label><span>{{ $kuesioner->nama_bumdesa }}</span></div>
+                <div class="info-item"><label>Nama Desa</label><span>{{ $kuesioner->nama_desa }}</span></div>
+                <div class="info-item"><label>Kecamatan</label><span>{{ $kuesioner->kecamatan }}</span></div>
                 <div class="info-item"><label>Kabupaten/Kota</label><span>{{ $kuesioner->kabupaten_kota }}</span></div>
                 <div class="info-item"><label>Lama Menjabat</label><span>{{ $kuesioner->lama_menjabat }}</span></div>
             </div>

@@ -34,8 +34,10 @@ class AdminController extends Controller
             
             // CSV Header
             fputcsv($file, [
-                'ID', 'Email Responden', 'Nama Responden', 'Jenis Kelamin', 'Usia', 'Jabatan', 
-                'Nama BUMDesa', 'Kabupaten/Kota', 'Lama Menjabat', 'Pendidikan Terakhir', 
+                'ID', 'Email Akun', 'Nama Responden', 'Nomor WA', 'Email BUMDesa', 
+                'Jenis Kelamin', 'Usia', 'Jabatan', 
+                'Nama BUMDesa', 'Nama Desa', 'Kecamatan', 'Kabupaten/Kota', 
+                'Lama Menjabat', 'Pendidikan Terakhir', 
                 'Pernah Pelatihan', 'Menggunakan Aplikasi', 'Frekuensi Pelatihan',
                 'X1.1', 'X1.2', 'X1.3', 'X1.4', 'X1.5',
                 'X2.1', 'X2.2', 'X2.3', 'X2.4', 'X2.5',
@@ -49,10 +51,14 @@ class AdminController extends Controller
                     $k->id,
                     $k->user->email ?? '-',
                     $k->nama_responden,
+                    $k->nomor_wa,
+                    $k->email_bumdesa,
                     $k->jenis_kelamin,
                     $k->usia,
                     $k->jabatan,
                     $k->nama_bumdesa,
+                    $k->nama_desa,
+                    $k->kecamatan,
                     $k->kabupaten_kota,
                     $k->lama_menjabat,
                     $k->pendidikan_terakhir,

@@ -45,7 +45,6 @@
             font-size: 1.2rem;
         }
 
-        .nav-links img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); }
         .nav-links a { font-size: 0.9rem; text-decoration: none; color: var(--text-light); font-weight: 500; transition: color 0.2s; }
         .nav-links a:hover { color: var(--primary); }
 
@@ -58,7 +57,7 @@
         .form-group { margin-bottom: 24px; }
         label { display: block; font-weight: 600; margin-bottom: 12px; font-size: 0.95rem; }
 
-        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); background-color: #f8fafc; font-family: inherit; font-size: 1rem; box-sizing: border-box; }
+        input[type="text"], input[type="number"], input[type="email"], select, textarea { width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); background-color: #f8fafc; font-family: inherit; font-size: 1rem; box-sizing: border-box; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -75,6 +74,8 @@
         .direction-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block; font-weight: 700; text-transform: uppercase; }
         .tag-pos { background: #dcfce7; color: #15803d; }
         .tag-neg { background: #fee2e2; color: #b91c1c; }
+
+        .format-note { font-size: 0.75rem; color: var(--text-light); margin-top: 4px; font-style: italic; }
 
         @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } nav { padding: 16px 20px; } .card { padding: 20px; } }
     </style>
@@ -105,29 +106,109 @@
                 @csrf
                 
                 <div class="section-title">I. Profil Responden</div>
-                <div class="form-group"><label for="nama_responden">Nama Lengkap</label><input type="text" id="nama_responden" name="nama_responden" required value="{{ old('nama_responden') }}"></div>
+                
                 <div class="grid">
-                    <div class="form-group"><label for="jenis_kelamin">Jenis Kelamin</label>
-                    <select id="jenis_kelamin" name="jenis_kelamin" required><option value="">Pilih</option><option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option><option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option></select></div>
-                    <div class="form-group"><label for="usia">Usia (Tahun)</label><input type="number" id="usia" name="usia" required value="{{ old('usia') }}"></div>
+                    <div class="form-group">
+                        <label for="nama_responden">Nama Lengkap</label>
+                        <input type="text" id="nama_responden" name="nama_responden" required value="{{ old('nama_responden') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="nomor_wa">Nomor WhatsApp</label>
+                        <input type="text" id="nomor_wa" name="nomor_wa" required value="{{ old('nomor_wa') }}" placeholder="Contoh: 081234567890">
+                        <div class="format-note">Gunakan format angka tanpa spasi/simbol</div>
+                    </div>
                 </div>
+
                 <div class="grid">
-                    <div class="form-group"><label for="jabatan">Jabatan</label><input type="text" id="jabatan" name="jabatan" required value="{{ old('jabatan') }}"></div>
-                    <div class="form-group"><label for="nama_bumdesa">Nama BUMDesa</label><input type="text" id="nama_bumdesa" name="nama_bumdesa" required value="{{ old('nama_bumdesa') }}"></div>
+                    <div class="form-group">
+                        <label for="email_bumdesa">Email BUMDesa</label>
+                        <input type="email" id="email_bumdesa" name="email_bumdesa" required value="{{ old('email_bumdesa') }}" placeholder="bumdesa@desa.id">
+                    </div>
+                    <div class="form-group">
+                        <label for="jenis_kelamin">Jenis Kelamin</label>
+                        <select id="jenis_kelamin" name="jenis_kelamin" required>
+                            <option value="">Pilih</option>
+                            <option value="Laki-laki" {{ old('jenis_kelamin') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="grid">
-                    <div class="form-group"><label for="kabupaten_kota">Kabupaten/Kota</label><input type="text" id="kabupaten_kota" name="kabupaten_kota" required value="{{ old('kabupaten_kota') }}"></div>
-                    <div class="form-group"><label for="lama_menjabat">Lama Menjabat</label><input type="text" id="lama_menjabat" name="lama_menjabat" required value="{{ old('lama_menjabat') }}"></div>
+                    <div class="form-group">
+                        <label for="usia">Usia (Tahun)</label>
+                        <input type="number" id="usia" name="usia" required value="{{ old('usia') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="jabatan">Jabatan</label>
+                        <select id="jabatan" name="jabatan" required>
+                            <option value="">Pilih Jabatan</option>
+                            @foreach(['Direktur', 'Sekretaris', 'Bendahara', 'Pengawas', 'Staff', 'Lainnya'] as $j)
+                                <option value="{{ $j }}" {{ old('jabatan') == $j ? 'selected' : '' }}>{{ $j }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
+
                 <div class="grid">
-                    <div class="form-group"><label for="pendidikan_terakhir">Pendidikan Terakhir</label><input type="text" id="pendidikan_terakhir" name="pendidikan_terakhir" required value="{{ old('pendidikan_terakhir') }}"></div>
-                    <div class="form-group"><label for="pernah_pelatihan">Pernah Ikut Pelatihan Akuntansi?</label>
-                    <select id="pernah_pelatihan" name="pernah_pelatihan" required><option value="">Pilih</option><option value="Ya" {{ old('pernah_pelatihan') == 'Ya' ? 'selected' : '' }}>Ya</option><option value="Tidak" {{ old('pernah_pelatihan') == 'Tidak' ? 'selected' : '' }}>Tidak</option></select></div>
+                    <div class="form-group">
+                        <label for="nama_bumdesa">Nama BUMDesa</label>
+                        <input type="text" id="nama_bumdesa" name="nama_bumdesa" required value="{{ old('nama_bumdesa') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="nama_desa">Nama Desa</label>
+                        <input type="text" id="nama_desa" name="nama_desa" required value="{{ old('nama_desa') }}">
+                    </div>
                 </div>
+
                 <div class="grid">
-                    <div class="form-group"><label for="menggunakan_aplikasi">Menggunakan Aplikasi Akuntansi?</label>
-                    <select id="menggunakan_aplikasi" name="menggunakan_aplikasi" required><option value="">Pilih</option><option value="Ya" {{ old('menggunakan_aplikasi') == 'Ya' ? 'selected' : '' }}>Ya</option><option value="Tidak" {{ old('menggunakan_aplikasi') == 'Tidak' ? 'selected' : '' }}>Tidak</option></select></div>
-                    <div class="form-group"><label for="frekuensi_pelatihan">Frekuensi Pelatihan (Kali/Thn)</label><input type="text" id="frekuensi_pelatihan" name="frekuensi_pelatihan" value="{{ old('frekuensi_pelatihan') }}"></div>
+                    <div class="form-group">
+                        <label for="kecamatan">Kecamatan</label>
+                        <input type="text" id="kecamatan" name="kecamatan" required value="{{ old('kecamatan') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="kabupaten_kota">Kabupaten/Kota</label>
+                        <input type="text" id="kabupaten_kota" name="kabupaten_kota" required value="{{ old('kabupaten_kota') }}">
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="lama_menjabat">Lama Menjabat</label>
+                        <input type="text" id="lama_menjabat" name="lama_menjabat" required value="{{ old('lama_menjabat') }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="pendidikan_terakhir">Pendidikan Terakhir</label>
+                        <select id="pendidikan_terakhir" name="pendidikan_terakhir" required>
+                            <option value="">Pilih Pendidikan</option>
+                            @foreach(['SD', 'SMP', 'SMA/SMK', 'Diploma', 'S1', 'S2', 'S3'] as $p)
+                                <option value="{{ $p }}" {{ old('pendidikan_terakhir') == $p ? 'selected' : '' }}>{{ $p }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="pernah_pelatihan">Pernah Ikut Pelatihan Akuntansi?</label>
+                        <select id="pernah_pelatihan" name="pernah_pelatihan" required>
+                            <option value="">Pilih</option>
+                            <option value="Ya" {{ old('pernah_pelatihan') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('pernah_pelatihan') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="menggunakan_aplikasi">Menggunakan Aplikasi Akuntansi?</label>
+                        <select id="menggunakan_aplikasi" name="menggunakan_aplikasi" required>
+                            <option value="">Pilih</option>
+                            <option value="Ya" {{ old('menggunakan_aplikasi') == 'Ya' ? 'selected' : '' }}>Ya</option>
+                            <option value="Tidak" {{ old('menggunakan_aplikasi') == 'Tidak' ? 'selected' : '' }}>Tidak</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="frekuensi_pelatihan">Frekuensi Pelatihan (Kali/Tahun)</label>
+                    <input type="text" id="frekuensi_pelatihan" name="frekuensi_pelatihan" value="{{ old('frekuensi_pelatihan') }}">
                 </div>
 
                 <div class="section-title">II. Instrumen Penelitian</div>
