@@ -206,7 +206,7 @@
                 </div>
                 <div class="form-group">
                     <label for="frekuensi_pelatihan">Frekuensi Pelatihan (Kali/Tahun)</label>
-                    <input type="text" id="frekuensi_pelatihan" name="frekuensi_pelatihan" value="{{ old('frekuensi_pelatihan') }}">
+                    <input type="text" id="frekuensi_pelatihan" name="frekuensi_pelatihan" required value="{{ old('frekuensi_pelatihan') }}">
                 </div>
 
                 <div class="section-title">II. Instrumen Penelitian</div>
@@ -286,9 +286,9 @@
                 @endforeach
 
                 <div class="section-title">III. Pendapat Tambahan</div>
-                <div class="form-group"><label for="hambatan_besar">Apa hambatan terbesar dalam pengelolaan administrasi?</label><textarea id="hambatan_besar" name="hambatan_besar" rows="3">{{ old('hambatan_besar') }}</textarea></div>
-                <div class="form-group"><label for="pengaruh_budaya">Bagaimana pengaruh budaya lokal terhadap kepatuhan pelaporan?</label><textarea id="pengaruh_budaya" name="pengaruh_budaya" rows="3">{{ old('pengaruh_budaya') }}</textarea></div>
-                <div class="form-group"><label for="perbaikan_dibutuhkan">Perbaikan apa yang menurut Anda paling mendesak?</label><textarea id="perbaikan_dibutuhkan" name="perbaikan_dibutuhkan" rows="3">{{ old('perbaikan_dibutuhkan') }}</textarea></div>
+                <div class="form-group"><label for="hambatan_besar">Apa hambatan terbesar dalam pengelolaan administrasi?</label><textarea id="hambatan_besar" name="hambatan_besar" rows="3" required>{{ old('hambatan_besar') }}</textarea></div>
+                <div class="form-group"><label for="pengaruh_budaya">Bagaimana pengaruh budaya lokal terhadap kepatuhan pelaporan?</label><textarea id="pengaruh_budaya" name="pengaruh_budaya" rows="3" required>{{ old('pengaruh_budaya') }}</textarea></div>
+                <div class="form-group"><label for="perbaikan_dibutuhkan">Perbaikan apa yang menurut Anda paling mendesak?</label><textarea id="perbaikan_dibutuhkan" name="perbaikan_dibutuhkan" rows="3" required>{{ old('perbaikan_dibutuhkan') }}</textarea></div>
 
                 <button type="submit" class="btn-submit">Simpan & Kirim Kuesioner</button>
             </form>

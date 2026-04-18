@@ -51,7 +51,7 @@ class KuesionerController extends Controller
             'pendidikan_terakhir' => 'required|in:SD,SMP,SMA/SMK,Diploma,S1,S2,S3',
             'pernah_pelatihan' => 'required|in:Ya,Tidak',
             'menggunakan_aplikasi' => 'required|in:Ya,Tidak',
-            'frekuensi_pelatihan' => 'nullable|string|max:50',
+            'frekuensi_pelatihan' => 'required|string|max:50',
             
             // Validate scale values 1-5
             'x1_1' => 'required|integer|between:1,5',
@@ -75,9 +75,9 @@ class KuesionerController extends Controller
             'y4' => 'required|integer|between:1,5',
             'y5' => 'required|integer|between:1,5',
             
-            'hambatan_besar' => 'nullable|string',
-            'pengaruh_budaya' => 'nullable|string',
-            'perbaikan_dibutuhkan' => 'nullable|string',
+            'hambatan_besar' => 'required|string',
+            'pengaruh_budaya' => 'required|string',
+            'perbaikan_dibutuhkan' => 'required|string',
         ]);
 
         $validated['user_id'] = auth()->id();
