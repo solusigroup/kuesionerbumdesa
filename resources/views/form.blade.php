@@ -71,9 +71,7 @@
         button.btn-submit { background-color: var(--primary); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.2s; margin-top: 40px; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3); }
         button.btn-submit:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
 
-        .direction-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block; font-weight: 700; text-transform: uppercase; }
-        .tag-pos { background: #dcfce7; color: #15803d; }
-        .tag-neg { background: #fee2e2; color: #b91c1c; }
+        .format-note { font-size: 0.75rem; color: var(--text-light); margin-top: 4px; font-style: italic; }
 
         .format-note { font-size: 0.75rem; color: var(--text-light); margin-top: 4px; font-style: italic; }
 
@@ -269,9 +267,6 @@
 
                 @foreach($instrumen as $group)
                     <div style="margin: 32px 0 16px;">
-                        <span class="direction-tag {{ $group['type'] == 'pos' ? 'tag-pos' : 'tag-neg' }}">
-                            Arah {{ $group['type'] == 'pos' ? 'Positif' : 'Negatif' }}
-                        </span>
                         <h3 style="margin: 0; font-size: 1.1rem; color: var(--text);">{{ $group['label'] }}</h3>
                     </div>
                     @foreach($group['questions'] as $idx => $q)

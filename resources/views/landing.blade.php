@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Penelitian Kuesioner BUMDesa</title>
+    <title>Kuesioner Penelitian BUMDesa</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -132,8 +133,19 @@
             z-index: 0;
         }
 
-        .shape-1 { width: 400px; height: 400px; top: -100px; right: -100px; }
-        .shape-2 { width: 300px; height: 300px; bottom: -50px; left: -50px; }
+        .shape-1 {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            right: -100px;
+        }
+
+        .shape-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -50px;
+            left: -50px;
+        }
 
         .disclaimer-box {
             margin-top: 56px;
@@ -154,7 +166,7 @@
 
         .disclaimer-icon {
             font-size: 2.5rem;
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+            filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
         }
 
         .disclaimer-text {
@@ -164,15 +176,24 @@
         }
 
         @media (max-width: 768px) {
-            nav { padding: 20px 40px; }
-            .hero { padding: 0 40px; }
-            .hero h1 { font-size: 2.5rem; }
+            nav {
+                padding: 20px 40px;
+            }
+
+            .hero {
+                padding: 0 40px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <nav>
-        <a href="/" class="logo">BUMDesa Research</a>
+        <a href="/" class="logo">UBS PPNI Research</a>
         <div class="nav-links">
             @auth
                 <a href="{{ route('kuesioner.index') }}">Dashboard</a>
@@ -192,7 +213,8 @@
         </div>
         <div class="hero-content">
             <h1>Optimalkan Kinerja BUMDesa Anda</h1>
-            <p>Berikan kontribusi Anda dalam penelitian mengenai efektivitas dan tata kelola BUMDesa untuk masa depan desa yang lebih mandiri.</p>
+            <p>Berikan kontribusi Anda dalam penelitian mengenai efektivitas dan tata kelola BUMDesa untuk masa depan
+                desa yang lebih mandiri.</p>
             <div class="cta-btns">
                 @auth
                     <a href="{{ route('kuesioner.create') }}" class="btn btn-primary">Mulai Kuesioner</a>
@@ -206,10 +228,13 @@
             <div class="disclaimer-box">
                 <div class="disclaimer-icon">🛡️</div>
                 <div class="disclaimer-text">
-                    <strong>Pernyataan Privasi & Etika:</strong> KERAHASIAAN data, identitas, dan privasi responden sepenuhnya <strong>DILINDUNGI oleh "Ethical Clearance"</strong>. Partisipasi Anda sangat berharga dan data Anda akan dikelola secara anonim untuk kepentingan akademik.
+                    <strong>Pernyataan Privasi & Etika:</strong> KERAHASIAAN data, identitas, dan privasi responden
+                    sepenuhnya <strong>DILINDUNGI oleh "Ethical Clearance"</strong>. Partisipasi Anda sangat berharga
+                    dan data Anda akan dikelola secara anonim untuk kepentingan akademik.
                 </div>
             </div>
         </div>
     </div>
 </body>
+
 </html>
