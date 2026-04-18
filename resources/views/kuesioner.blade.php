@@ -167,9 +167,12 @@
                     <div class="response-detail">
                         <div class="grid-info">
                             <div class="info-item"><label>Nama Responden</label><span>{{ $item->nama_responden }}</span></div>
+                            <div class="info-item"><label>Nomor WhatsApp</label><span>{{ $item->nomor_wa }}</span></div>
+                            <div class="info-item"><label>Email BUMDesa</label><span>{{ $item->email_bumdesa }}</span></div>
                             <div class="info-item"><label>BUMDesa</label><span>{{ $item->nama_bumdesa }}</span></div>
-                            <div class="info-item"><label>Jabatan</label><span>{{ $item->jabatan }}</span></div>
+                            <div class="info-item"><label>Desa / Kecamatan</label><span>{{ $item->nama_desa }} / {{ $item->kecamatan }}</span></div>
                             <div class="info-item"><label>Kabupaten/Kota</label><span>{{ $item->kabupaten_kota }}</span></div>
+                            <div class="info-item"><label>Jabatan</label><span>{{ $item->jabatan }}</span></div>
                             <div class="info-item"><label>Tanggal Kirim</label><span>{{ $item->created_at->format('d F Y') }}</span></div>
                         </div>
                         

@@ -91,12 +91,20 @@
 
             <div class="grid-charts">
                 <div class="chart-card">
-                    <h3>Profil Perbandingan Variabel (Radar)</h3>
-                    <div style="height: 350px;"><canvas id="radarChart"></canvas></div>
-                </div>
-                <div class="chart-card">
                     <h3>Sebaran Responden per Kabupaten</h3>
                     <div style="height: 350px;"><canvas id="kabupatenChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Sebaran Responden per Jabatan</h3>
+                    <div style="height: 350px;"><canvas id="jabatanChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Sebaran Responden per Pendidikan</h3>
+                    <div style="height: 350px;"><canvas id="pendidikanChart"></canvas></div>
+                </div>
+                <div class="chart-card" style="grid-column: span 1;">
+                    <h3>Radar Perbandingan Variabel</h3>
+                    <div style="height: 350px;"><canvas id="radarChart"></canvas></div>
                 </div>
                 <div class="chart-card" style="grid-column: span 2;">
                     <h3>Rincian Skor per Butir Pernyataan</h3>
@@ -144,12 +152,37 @@
                 labels: {!! json_encode($byKabupaten->keys()) !!},
                 datasets: [{
                     data: {!! json_encode($byKabupaten->values()) !!},
-                    backgroundColor: [
-                        '#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'
-                    ]
+                    backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
                 }]
             },
             options: { maintainAspectRatio: false, cutout: '60%' }
+        });
+
+        const ctxJab = document.getElementById('jabatanChart');
+        new Chart(ctxJab, {
+            type: 'pie',
+            data: {
+                labels: {!! json_encode($byJabatan->keys()) !!},
+                datasets: [{
+                    data: {!! json_encode($byJabatan->values()) !!},
+                    backgroundColor: ['#6366f1', '#14b8a6', '#f59e0b', '#ef4444', '#a855f7', '#ec4899']
+                }]
+            },
+            options: { maintainAspectRatio: false }
+        });
+
+        const ctxEdu = document.getElementById('pendidikanChart');
+        new Chart(ctxEdu, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($byPendidikan->keys()) !!},
+                datasets: [{
+                    label: 'Jumlah Responden',
+                    data: {!! json_encode($byPendidikan->values()) !!},
+                    backgroundColor: '#4f46e5'
+                }]
+            },
+            options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
         });
 
         const ctxBar = document.getElementById('barChart');

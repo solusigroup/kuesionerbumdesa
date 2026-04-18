@@ -38,7 +38,17 @@ class AnalysisController extends Controller
             ->groupBy('kabupaten_kota')
             ->pluck('count', 'kabupaten_kota');
 
-        return view('admin.analysis', compact('stats', 'averages', 'totalRespondents', 'byKabupaten'));
+        // Distribution by Jabatan
+        $byJabatan = Kuesioner::select('jabatan', DB::raw('count(*) as count'))
+            ->groupBy('jabatan')
+            ->pluck('count', 'jabatan');
+
+        // Distribution by Pendidikan
+        $byPendidikan = Kuesioner::select('pendidikan_terakhir', DB::raw('count(*) as count'))
+            ->groupBy('pendidikan_terakhir')
+            ->pluck('count', 'pendidikan_terakhir');
+
+        return view('admin.analysis', compact('stats', 'averages', 'totalRespondents', 'byKabupaten', 'byJabatan', 'byPendidikan'));
     }
 
     private function avgItems($collection, $prefix, $count)
