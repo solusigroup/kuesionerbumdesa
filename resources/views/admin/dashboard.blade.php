@@ -184,6 +184,12 @@
             </div>
         </div>
 
+        @if(session('success')) 
+            <div style="background: #dcfce7; color: #15803d; padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #bbf7d0; font-weight: 500;">
+                {{ session('success') }}
+            </div> 
+        @endif
+
         <div class="card">
             <div class="table-container">
                 <table>
@@ -196,6 +202,7 @@
                             <th>BUMDesa</th>
                             <th>Jabatan</th>
                             <th>Total Skor</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -220,10 +227,17 @@
                             <td>{{ $k->nama_bumdesa }}</td>
                             <td>{{ $k->jabatan }}</td>
                             <td style="font-weight: 600; color: var(--primary);">{{ $totalScore }} / 100</td>
+                            <td>
+                                <form action="{{ route('admin.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600; font-size: 0.85rem; padding: 0;">Hapus</button>
+                                </form>
+                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="6" class="empty">Belum ada data kuesioner yang disubmit.</td>
+                            <td colspan="8" class="empty">Belum ada data kuesioner yang disubmit.</td>
                         </tr>
                         @endforelse
                     </tbody>

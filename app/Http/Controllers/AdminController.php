@@ -81,4 +81,12 @@ class AdminController extends Controller
 
         return new StreamedResponse($callback, 200, $headers);
     }
+
+    public function destroy($id)
+    {
+        $kuesioner = Kuesioner::findOrFail($id);
+        $kuesioner->delete();
+
+        return redirect()->route('admin.dashboard')->with('success', 'Data kuesioner berhasil dihapus.');
+    }
 }
