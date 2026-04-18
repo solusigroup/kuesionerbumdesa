@@ -135,6 +135,34 @@
         .shape-1 { width: 400px; height: 400px; top: -100px; right: -100px; }
         .shape-2 { width: 300px; height: 300px; bottom: -50px; left: -50px; }
 
+        .disclaimer-box {
+            margin-top: 56px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 16px;
+            border: 1px dashed var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .disclaimer-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+        }
+
+        .disclaimer-text {
+            font-size: 0.95rem;
+            color: #475569;
+            line-height: 1.5;
+        }
+
         @media (max-width: 768px) {
             nav { padding: 20px 40px; }
             .hero { padding: 0 40px; }
@@ -173,6 +201,13 @@
                     <a href="{{ route('register') }}" class="btn btn-primary">Ikut Berpartisipasi</a>
                     <a href="{{ route('login') }}" class="btn btn-outline">Sudah Ada Akun</a>
                 @endauth
+            </div>
+
+            <div class="disclaimer-box">
+                <div class="disclaimer-icon">🛡️</div>
+                <div class="disclaimer-text">
+                    <strong>Pernyataan Privasi & Etika:</strong> KERAHASIAAN data, identitas, dan privasi responden sepenuhnya <strong>DILINDUNGI oleh "Ethical Clearance"</strong>. Partisipasi Anda sangat berharga dan data Anda akan dikelola secara anonim untuk kepentingan akademik.
+                </div>
             </div>
         </div>
     </div>
