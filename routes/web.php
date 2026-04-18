@@ -24,6 +24,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // Protected Kuesioner Routes (Respondents)
 Route::middleware('auth')->group(function () {
     Route::get('/kuesioner', [KuesionerController::class, 'index'])->name('kuesioner.index');
+    Route::get('/kuesioner/thanks', [KuesionerController::class, 'thanks'])->name('kuesioner.thanks');
     Route::get('/kuesioner/create', [KuesionerController::class, 'create'])->name('kuesioner.create');
     Route::post('/kuesioner', [KuesionerController::class, 'store'])->name('kuesioner.store');
 });

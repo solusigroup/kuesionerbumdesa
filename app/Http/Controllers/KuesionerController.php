@@ -83,6 +83,11 @@ class KuesionerController extends Controller
         $validated['user_id'] = auth()->id();
         Kuesioner::create($validated);
 
-        return redirect()->route('kuesioner.index')->with('success', 'Kuesioner berhasil disimpan.');
+        return redirect()->route('kuesioner.thanks')->with('success', 'Kuesioner berhasil disimpan.');
+    }
+
+    public function thanks()
+    {
+        return view('thanks');
     }
 }
