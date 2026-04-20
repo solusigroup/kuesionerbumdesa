@@ -20,7 +20,19 @@
 
         body { font-family: 'Outfit', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 40px; background: #ffffff; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-        .logo { font-weight: 700; color: var(--primary); text-decoration: none; font-size: 1.25rem; }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.25rem;
+        }
+        .logo img {
+            height: 40px;
+            object-fit: contain;
+        }
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px; }
         
@@ -37,11 +49,30 @@
         .btn-nav-primary { background: var(--primary); color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; }
 
         @media (max-width: 1024px) { .grid-stats { grid-template-columns: 1fr 1fr; } .grid-charts { grid-template-columns: 1fr; } }
+
+        .table-stats { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 0.9rem; }
+        .table-stats th, .table-stats td { padding: 12px; text-align: center; border-bottom: 1px solid var(--border); }
+        .table-stats th { background: #f8fafc; color: var(--text-light); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+        .table-stats tr:last-child td { border-bottom: none; }
+        .badge-success { background: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; }
+        .badge-danger { background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem; }
+        
+        .regression-box { background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); color: white; padding: 32px; border-radius: 24px; position: relative; overflow: hidden; margin-top: 40px; }
+        .regression-box::before { content: "f(x)"; position: absolute; right: -20px; bottom: -20px; font-size: 15rem; font-weight: 900; color: rgba(255,255,255,0.05); z-index: 0; }
+        .regression-box * { position: relative; z-index: 1; }
+        .formula-display { font-size: 1.75rem; font-weight: 700; text-align: center; margin: 24px 0; letter-spacing: 0.02em; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .coeff-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 32px; }
+        .coeff-item { background: rgba(255,255,255,0.1); padding: 16px; border-radius: 12px; backdrop-filter: blur(5px); }
+        .coeff-label { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.7); text-transform: uppercase; margin-bottom: 4px; }
+        .coeff-value { font-size: 1.25rem; font-weight: 700; }
     </style>
 </head>
 <body>
     <nav>
-        <a href="{{ route('admin.dashboard') }}" class="logo">BUMDesa Admin</a>
+        <a href="{{ route('admin.dashboard') }}" class="logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo">
+            <span>BUMDesa Admin</span>
+        </a>
         <div>
             <a href="{{ route('admin.dashboard') }}" class="btn-nav-primary">Kembali ke Dashboard</a>
         </div>
@@ -111,6 +142,116 @@
                     <canvas id="barChart"></canvas>
                 </div>
             </div>
+
+            <div class="header" style="margin-top: 60px;">
+                <div>
+                    <h2>Uji Kualitas Instrumen</h2>
+                    <p style="color: var(--text-light);">Hasil pengujian Validitas (Pearson) dan Reliabilitas (Cronbach's Alpha).</p>
+                </div>
+            </div>
+
+            <div class="grid-charts">
+                @foreach($quality['validity'] as $key => $items)
+                    <div class="chart-card">
+                        <h3>{{ $vars[$key]['label'] ?? strtoupper($key) }}</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <span style="font-size: 0.85rem; color: var(--text-light);">Reliabilitas (Alpha):</span>
+                            <span class="{{ $quality['reliability'][$key] >= 0.6 ? 'badge-success' : 'badge-danger' }}">
+                                {{ $quality['reliability'][$key] }} 
+                                ({{ $quality['reliability'][$key] >= 0.6 ? 'Reliabel' : 'Tidak Reliabel' }})
+                            </span>
+                        </div>
+                        <table class="table-stats">
+                            <thead>
+                                <tr>
+                                    <th>Butir</th>
+                                    <th>Korelasi (r)</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($items as $label => $r)
+                                    <tr>
+                                        <td>{{ $label }}</td>
+                                        <td style="font-weight: 600;">{{ $r }}</td>
+                                        <td>
+                                            @if($totalRespondents > 2)
+                                                <span class="{{ $r >= 0.3 ? 'badge-success' : 'badge-danger' }}">
+                                                    {{ $r >= 0.3 ? 'Valid' : 'Tidak Valid' }}
+                                                </span>
+                                            @else
+                                                <span style="color: var(--text-light); font-size: 0.7rem;">Data Minim</span>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endforeach
+            </div>
+
+            @php
+                $vars = [
+                    'x1' => ['label' => 'Kapasitas Manajerial (X1)'],
+                    'x2' => ['label' => 'Tekanan Budaya (X2)'],
+                    'x3' => ['label' => 'Kelemahan Tata Kelola (X3)'],
+                    'y'  => ['label' => 'Kualitas Pelaporan (Y)']
+                ];
+            @endphp
+
+            <div class="header" style="margin-top: 60px;">
+                <div>
+                    <h2>Analisis Regresi Linear Berganda</h2>
+                    <p style="color: var(--text-light);">Pengaruh Kapasitas (X1), Budaya (X2), dan Tata Kelola (X3) terhadap Kualitas Pelaporan (Y).</p>
+                </div>
+            </div>
+
+            @if($regression)
+                <div class="regression-box">
+                    <div style="font-weight: 600; color: rgba(255,255,255,0.8); text-align: center; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;">Persamaan Regresi</div>
+                    <div class="formula-display">
+                        Y = {{ $regression['a'] }} 
+                        {{ $regression['b1'] >= 0 ? '+' : '' }} {{ $regression['b1'] }}X₁ 
+                        {{ $regression['b2'] >= 0 ? '+' : '' }} {{ $regression['b2'] }}X₂ 
+                        {{ $regression['b3'] >= 0 ? '+' : '' }} {{ $regression['b3'] }}X₃ 
+                        + e
+                    </div>
+                    
+                    <div class="coeff-grid">
+                        <div class="coeff-item">
+                            <div class="coeff-label">Konstanta (a)</div>
+                            <div class="coeff-value">{{ $regression['a'] }}</div>
+                        </div>
+                        <div class="coeff-item">
+                            <div class="coeff-label">Koefisien X₁ (b₁)</div>
+                            <div class="coeff-value">{{ $regression['b1'] }}</div>
+                        </div>
+                        <div class="coeff-item">
+                            <div class="coeff-label">Koefisien X₂ (b₂)</div>
+                            <div class="coeff-value">{{ $regression['b2'] }}</div>
+                        </div>
+                        <div class="coeff-item">
+                            <div class="coeff-label">Koefisien X₃ (b₃)</div>
+                            <div class="coeff-value">{{ $regression['b3'] }}</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 32px; display: flex; align-items: center; justify-content: center; gap: 24px;">
+                        <div style="background: rgba(255,255,255,0.15); padding: 12px 24px; border-radius: 12px;">
+                            <span style="font-size: 0.8rem; color: rgba(255,255,255,0.7); display: block;">R-Squared (R²)</span>
+                            <span style="font-size: 1.5rem; font-weight: 700;">{{ $regression['r2'] }}</span>
+                        </div>
+                        <div style="max-width: 400px; font-size: 0.85rem; color: rgba(255,255,255,0.8);">
+                            Nilai $R^2$ sebesar {{ $regression['r2'] }} menunjukkan bahwa variabel independen mampu menjelaskan {{ $regression['r2'] * 100 }}% variasi dari variabel dependen.
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="chart-card" style="text-align: center; padding: 40px;">
+                    <p style="color: var(--text-light);">Dibutuhkan minimal 4 responden untuk menjalankan analisis regresi.</p>
+                </div>
+            @endif
         @endif
     </div>
 

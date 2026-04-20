@@ -39,10 +39,17 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
             font-size: 1.25rem;
+        }
+        .logo img {
+            height: 40px;
+            object-fit: contain;
         }
 
         .nav-links {
@@ -160,7 +167,10 @@
 </head>
 <body>
     <nav>
-        <a href="/" class="logo">BUMDesa Admin</a>
+        <a href="/" class="logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo">
+            <span>BUMDesa Admin</span>
+        </a>
         <div class="nav-links">
             <span>{{ auth()->user()->name }} (Superadmin)</span>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>

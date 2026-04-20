@@ -39,10 +39,19 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .logo img {
+            height: 48px;
+            object-fit: contain;
+        }
+        .logo span {
             font-size: 1.5rem;
             font-weight: 800;
             color: var(--primary);
-            text-decoration: none;
         }
 
         .nav-links a {
@@ -193,7 +202,10 @@
 
 <body>
     <nav>
-        <a href="/" class="logo">UBS PPNI Research</a>
+        <a href="/" class="logo">
+            <img src="{{ asset('img/logo.png') }}" alt="UBS PPNI Logo">
+            <span>UBS PPNI Research</span>
+        </a>
         <div class="nav-links">
             @auth
                 <a href="{{ route('kuesioner.index') }}">Dashboard</a>

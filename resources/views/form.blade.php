@@ -39,10 +39,17 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
             font-size: 1.2rem;
+        }
+        .logo img {
+            height: 40px;
+            object-fit: contain;
         }
 
         .nav-links a { font-size: 0.9rem; text-decoration: none; color: var(--text-light); font-weight: 500; transition: color 0.2s; }
@@ -80,7 +87,10 @@
 </head>
 <body>
     <nav>
-        <a href="/" class="logo">BUMDesa Research</a>
+        <a href="/" class="logo">
+            <img src="{{ asset('img/logo.png') }}" alt="Logo">
+            <span>BUMDesa Research</span>
+        </a>
         <div class="nav-links">
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
