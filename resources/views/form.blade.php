@@ -166,14 +166,35 @@
                     </div>
                     <div class="form-group">
                         <label for="kabupaten_kota">Kabupaten/Kota</label>
-                        <input type="text" id="kabupaten_kota" name="kabupaten_kota" required value="{{ old('kabupaten_kota') }}">
+                        <select id="kabupaten_kota" name="kabupaten_kota" required>
+                            <option value="">Pilih Kabupaten/Kota</option>
+                            @foreach([
+                                'Kabupaten Bangkalan', 'Kabupaten Banyuwangi', 'Kabupaten Blitar', 'Kabupaten Bojonegoro',
+                                'Kabupaten Bondowoso', 'Kabupaten Gresik', 'Kabupaten Jember', 'Kabupaten Jombang',
+                                'Kabupaten Kediri', 'Kabupaten Lamongan', 'Kabupaten Lumajang', 'Kabupaten Madiun',
+                                'Kabupaten Magetan', 'Kabupaten Malang', 'Kabupaten Mojokerto', 'Kabupaten Nganjuk',
+                                'Kabupaten Ngawi', 'Kabupaten Pacitan', 'Kabupaten Pamekasan', 'Kabupaten Pasuruan',
+                                'Kabupaten Ponorogo', 'Kabupaten Probolinggo', 'Kabupaten Sampang', 'Kabupaten Sidoarjo',
+                                'Kabupaten Situbondo', 'Kabupaten Sumenep', 'Kabupaten Trenggalek', 'Kabupaten Tuban',
+                                'Kabupaten Tulungagung', 'Kota Batu', 'Kota Blitar', 'Kota Kediri',
+                                'Kota Madiun', 'Kota Malang', 'Kota Mojokerto', 'Kota Pasuruan',
+                                'Kota Probolinggo', 'Kota Surabaya'
+                            ] as $kota)
+                                <option value="{{ $kota }}" {{ old('kabupaten_kota') == $kota ? 'selected' : '' }}>{{ $kota }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
                 <div class="grid">
                     <div class="form-group">
                         <label for="lama_menjabat">Lama Menjabat</label>
-                        <input type="text" id="lama_menjabat" name="lama_menjabat" required value="{{ old('lama_menjabat') }}">
+                        <select id="lama_menjabat" name="lama_menjabat" required>
+                            <option value="">Pilih Lama Menjabat</option>
+                            @foreach(['Kurang dari 1 tahun', '1 sampai 3 tahun', '4 sampai 6 tahun', 'Lebih dari 6 tahun'] as $lama)
+                                <option value="{{ $lama }}" {{ old('lama_menjabat') == $lama ? 'selected' : '' }}>{{ $lama }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="pendidikan_terakhir">Pendidikan Terakhir</label>
@@ -205,8 +226,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="frekuensi_pelatihan">Frekuensi Pelatihan (Kali/Tahun)</label>
-                    <input type="text" id="frekuensi_pelatihan" name="frekuensi_pelatihan" required value="{{ old('frekuensi_pelatihan') }}">
+                    <label for="frekuensi_pelatihan">Frekuensi pelatihan atau pendampingan dua tahun terakhir</label>
+                    <select id="frekuensi_pelatihan" name="frekuensi_pelatihan" required>
+                        <option value="">Pilih Frekuensi</option>
+                        @foreach(['Tidak pernah', '1 kali', '2 sampai 3 kali', 'Lebih dari 3 kali'] as $f)
+                            <option value="{{ $f }}" {{ old('frekuensi_pelatihan') == $f ? 'selected' : '' }}>{{ $f }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="section-title">II. Instrumen Penelitian</div>
