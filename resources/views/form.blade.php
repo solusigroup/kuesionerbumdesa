@@ -188,7 +188,7 @@
                                 'Kabupaten Situbondo', 'Kabupaten Sumenep', 'Kabupaten Trenggalek', 'Kabupaten Tuban',
                                 'Kabupaten Tulungagung', 'Kota Batu', 'Kota Blitar', 'Kota Kediri',
                                 'Kota Madiun', 'Kota Malang', 'Kota Mojokerto', 'Kota Pasuruan',
-                                'Kota Probolinggo', 'Kota Surabaya'
+                                'Kota Probolinggo', 'Kota Surabaya', 'Kabupaten Lainnya'
                             ] as $kota)
                                 <option value="{{ $kota }}" {{ old('kabupaten_kota') == $kota ? 'selected' : '' }}>{{ $kota }}</option>
                             @endforeach
