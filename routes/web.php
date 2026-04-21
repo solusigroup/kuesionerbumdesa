@@ -11,6 +11,14 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
+// Handle default redirect for authenticated users hitting guest routes
+Route::get('/home', function () {
+    if (auth()->check() && auth()->user()->role === 'superadmin') {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('kuesioner.create');
+})->name('home');
+
 // Auth Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

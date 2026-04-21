@@ -188,6 +188,7 @@
                         
                         <div style="padding-top: 20px; border-top: 1px solid var(--border);">
                             <p style="color: var(--text-light);">Terima kasih telah berpartisipasi. Jawaban Anda telah tersimpan dengan aman di sistem kami.</p>
+                            <a href="{{ route('kuesioner.thanks') }}" class="btn btn-primary" style="margin-top: 15px;">Lihat Tawaran Aplikasi / Promo</a>
                         </div>
                     </div>
                 @endforeach

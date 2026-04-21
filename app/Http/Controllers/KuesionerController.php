@@ -22,7 +22,7 @@ class KuesionerController extends Controller
     public function create()
     {
         if (Kuesioner::where('user_id', auth()->id())->exists()) {
-            return redirect()->route('kuesioner.index')->with('info', 'Anda sudah mengisi kuesioner.');
+            return redirect()->route('kuesioner.thanks')->with('info', 'Anda sudah mengisi kuesioner.');
         }
         return view('form');
     }
@@ -33,7 +33,7 @@ class KuesionerController extends Controller
     public function store(Request $request)
     {
         if (Kuesioner::where('user_id', auth()->id())->exists()) {
-            return redirect()->route('kuesioner.index')->with('error', 'Anda sudah mengisi kuesioner.');
+            return redirect()->route('kuesioner.thanks')->with('error', 'Anda sudah mengisi kuesioner.');
         }
 
         $validated = $request->validate([
