@@ -90,8 +90,11 @@ class AnalysisController extends Controller
         $byKabupaten = Kuesioner::select('kabupaten_kota', DB::raw('count(*) as count'))->groupBy('kabupaten_kota')->pluck('count', 'kabupaten_kota');
         $byJabatan = Kuesioner::select('jabatan', DB::raw('count(*) as count'))->groupBy('jabatan')->pluck('count', 'jabatan');
         $byPendidikan = Kuesioner::select('pendidikan_terakhir', DB::raw('count(*) as count'))->groupBy('pendidikan_terakhir')->pluck('count', 'pendidikan_terakhir');
+        $byPelatihan = Kuesioner::select('pernah_pelatihan', DB::raw('count(*) as count'))->groupBy('pernah_pelatihan')->pluck('count', 'pernah_pelatihan');
+        $byAplikasi = Kuesioner::select('menggunakan_aplikasi', DB::raw('count(*) as count'))->groupBy('menggunakan_aplikasi')->pluck('count', 'menggunakan_aplikasi');
+        $byFrekuensi = Kuesioner::select('frekuensi_pelatihan', DB::raw('count(*) as count'))->whereNotNull('frekuensi_pelatihan')->groupBy('frekuensi_pelatihan')->pluck('count', 'frekuensi_pelatihan');
 
-        return view('admin.analysis', compact('stats', 'averages', 'totalRespondents', 'byKabupaten', 'byJabatan', 'byPendidikan', 'quality', 'regression'));
+        return view('admin.analysis', compact('stats', 'averages', 'totalRespondents', 'byKabupaten', 'byJabatan', 'byPendidikan', 'quality', 'regression', 'byPelatihan', 'byAplikasi', 'byFrekuensi'));
     }
 
     private function avgItems($collection, $prefix, $count)

@@ -24,6 +24,10 @@
             overflow-x: hidden;
         }
 
+        * {
+            box-sizing: border-box;
+        }
+
         html {
             scroll-behavior: smooth;
         }
@@ -73,22 +77,22 @@
         }
 
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 80px;
+            padding: 120px 80px 80px 80px;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             position: relative;
         }
 
         .hero-content {
-            max-width: 700px;
+            max-width: 850px;
             text-align: center;
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 24px;
@@ -98,9 +102,9 @@
         }
 
         .hero p {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             color: #64748b;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             line-height: 1.6;
         }
 
@@ -163,7 +167,7 @@
         }
 
         .disclaimer-box {
-            margin-top: 56px;
+            margin-top: 32px;
             padding: 24px;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(5px);
@@ -196,7 +200,7 @@
             }
 
             .hero {
-                padding: 0 40px;
+                padding: 100px 24px 60px 24px;
             }
 
             .hero h1 {
@@ -371,8 +375,17 @@
         </div>
         <div class="hero-content">
             <h1>Optimalkan Kinerja BUMDesa Anda</h1>
+            <p style="text-align: justify; margin-bottom: 32px;">Perkenalkan, saya <b>Kurniawan, S.E., Ak., M.Ak.</b>,
+                dari Universitas Bina
+                Sehat PPNI Mojokerto sedang melakukan penelitian mendalam mengenai dinamika tata kelola usaha desa
+                dengan judul <b>'Paradoks Akuntabilitas BUMDesa: Studi Eksplorasi Hambatan Kapasitas Manajerial, Kultur
+                    Lokal, dan Keterbatasan Tata Kelola Keuangan sebagai Faktor Gagalnya Implementasi Pelaporan
+                    Keuangan'</b>.
+                Sehubungan dengan hal tersebut, saya memohon kesediaan Bapak/Ibu untuk meluangkan waktu sejenak mengisi
+                kuesioner ini. Partisipasi Anda sangat berharga untuk memetakan tantangan nyata di lapangan dan
+                merumuskan solusi bagi penguatan akuntabilitas BUMDesa ke depannya.</p>
             <p>Berikan kontribusi Anda dalam penelitian mengenai efektivitas dan tata kelola BUMDesa untuk masa depan
-                desa yang lebih mandiri.</p>
+                desa yang lebih mandiri. silakan klik "ikut berpartisipasi" dibawah ini</p>
             <div class="cta-btns">
                 @auth
                     <a href="{{ route('kuesioner.create') }}" class="btn btn-primary">Mulai Kuesioner</a>

@@ -133,6 +133,18 @@
                     <h3>Sebaran Responden per Pendidikan</h3>
                     <div style="height: 350px;"><canvas id="pendidikanChart"></canvas></div>
                 </div>
+                <div class="chart-card">
+                    <h3>Pernah Mengikuti Pelatihan</h3>
+                    <div style="height: 350px;"><canvas id="pelatihanChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Menggunakan Aplikasi</h3>
+                    <div style="height: 350px;"><canvas id="aplikasiChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>Frekuensi Pelatihan</h3>
+                    <div style="height: 350px;"><canvas id="frekuensiChart"></canvas></div>
+                </div>
                 <div class="chart-card" style="grid-column: span 1;">
                     <h3>Radar Perbandingan Variabel</h3>
                     <div style="height: 350px;"><canvas id="radarChart"></canvas></div>
@@ -321,6 +333,46 @@
                     label: 'Jumlah Responden',
                     data: {!! json_encode($byPendidikan->values()) !!},
                     backgroundColor: '#4f46e5'
+                }]
+            },
+            options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        });
+
+        const ctxPel = document.getElementById('pelatihanChart');
+        new Chart(ctxPel, {
+            type: 'pie',
+            data: {
+                labels: {!! json_encode($byPelatihan->keys()) !!},
+                datasets: [{
+                    data: {!! json_encode($byPelatihan->values()) !!},
+                    backgroundColor: ['#10b981', '#ef4444']
+                }]
+            },
+            options: { maintainAspectRatio: false }
+        });
+
+        const ctxApp = document.getElementById('aplikasiChart');
+        new Chart(ctxApp, {
+            type: 'pie',
+            data: {
+                labels: {!! json_encode($byAplikasi->keys()) !!},
+                datasets: [{
+                    data: {!! json_encode($byAplikasi->values()) !!},
+                    backgroundColor: ['#3b82f6', '#f59e0b']
+                }]
+            },
+            options: { maintainAspectRatio: false }
+        });
+
+        const ctxFreq = document.getElementById('frekuensiChart');
+        new Chart(ctxFreq, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($byFrekuensi->keys()) !!},
+                datasets: [{
+                    label: 'Jumlah Responden',
+                    data: {!! json_encode($byFrekuensi->values()) !!},
+                    backgroundColor: '#8b5cf6'
                 }]
             },
             options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }

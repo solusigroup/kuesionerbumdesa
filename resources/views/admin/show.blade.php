@@ -164,6 +164,10 @@
                 <div class="info-item"><label>Kecamatan</label><span>{{ $kuesioner->kecamatan }}</span></div>
                 <div class="info-item"><label>Kabupaten/Kota</label><span>{{ $kuesioner->kabupaten_kota }}</span></div>
                 <div class="info-item"><label>Lama Menjabat</label><span>{{ $kuesioner->lama_menjabat }}</span></div>
+                <div class="info-item"><label>Pendidikan Terakhir</label><span>{{ $kuesioner->pendidikan_terakhir }}</span></div>
+                <div class="info-item"><label>Pernah Pelatihan</label><span>{{ $kuesioner->pernah_pelatihan }}</span></div>
+                <div class="info-item"><label>Menggunakan Aplikasi</label><span>{{ $kuesioner->menggunakan_aplikasi }}</span></div>
+                <div class="info-item"><label>Frekuensi Pelatihan</label><span>{{ $kuesioner->frekuensi_pelatihan ?: '-' }}</span></div>
             </div>
 
             @php
