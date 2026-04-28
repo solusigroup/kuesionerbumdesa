@@ -122,7 +122,9 @@ class AnalysisController extends Controller
             $sumY2 += ($y[$i] ** 2);
         }
         $num = ($n * $sumXY) - ($sumX * $sumY);
-        $den = sqrt((($n * $sumX2) - ($sumX ** 2)) * (($n * $sumY2) - ($sumY ** 2)));
+        $val = (($n * $sumX2) - ($sumX ** 2)) * (($n * $sumY2) - ($sumY ** 2));
+        if ($val < 0) $val = 0; // Mencegah hasil negatif akibat floating point error
+        $den = sqrt($val);
         return $den == 0 ? 0 : $num / $den;
     }
 
@@ -226,7 +228,7 @@ class AnalysisController extends Controller
             $B[$i] = $tmp;
 
             // Make all rows below this one 0 in current column
-            if ($A[$i][$i] == 0) return null; // Singular matrix
+            if (abs($A[$i][$i]) < 1e-10) return null; // Singular matrix (dengan toleransi floating point)
             for ($k = $i + 1; $k < $n; $k++) {
                 $c = -$A[$k][$i] / $A[$i][$i];
                 for ($j = $i; $j < $n; $j++) {

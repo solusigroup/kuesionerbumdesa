@@ -65,6 +65,7 @@
         .coeff-item { background: rgba(255,255,255,0.1); padding: 16px; border-radius: 12px; backdrop-filter: blur(5px); }
         .coeff-label { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.7); text-transform: uppercase; margin-bottom: 4px; }
         .coeff-value { font-size: 1.25rem; font-weight: 700; }
+        .narration-box { background: #e0e7ff; border-left: 4px solid var(--primary); padding: 16px 24px; margin-top: 20px; border-radius: 0 12px 12px 0; font-size: 0.95rem; color: var(--text); line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -120,6 +121,10 @@
                 </div>
             </div>
 
+            <div class="narration-box" style="margin-bottom: 40px;">
+                <strong>Interpretasi Visualisasi Data:</strong> Berdasarkan ringkasan di atas, variabel <strong>Kapasitas Manajerial (X1)</strong> menunjukkan skor rata-rata {{ $averages['x1'] }} dan <strong>Kualitas Pelaporan (Y)</strong> sebesar {{ $averages['y'] }}, yang mengindikasikan kecenderungan positif (mendekati skor ideal 5). Sebaliknya, <strong>Tekanan Budaya (X2)</strong> dan <strong>Kelemahan Tata Kelola (X3)</strong> mencatatkan rata-rata masing-masing {{ $averages['x2'] }} dan {{ $averages['x3'] }}. Keduanya dievaluasi dengan arah terbalik (skor ideal 1), yang berarti semakin rendah skornya, semakin sedikit hambatan yang dirasakan oleh responden terkait budaya dan tata kelola di lingkungan BUMDesa.
+            </div>
+
             <div class="grid-charts">
                 <div class="chart-card">
                     <h3>Sebaran Responden per Kabupaten</h3>
@@ -162,6 +167,15 @@
                 </div>
             </div>
 
+            @php
+                $vars = [
+                    'x1' => ['label' => 'Kapasitas Manajerial (X1)'],
+                    'x2' => ['label' => 'Tekanan Budaya (X2)'],
+                    'x3' => ['label' => 'Kelemahan Tata Kelola (X3)'],
+                    'y'  => ['label' => 'Kualitas Pelaporan (Y)']
+                ];
+            @endphp
+
             <div class="grid-charts">
                 @foreach($quality['validity'] as $key => $items)
                     <div class="chart-card">
@@ -199,18 +213,12 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="narration-box" style="margin-top: 16px; font-size: 0.85rem; padding: 12px 16px; background: {{ $quality['reliability'][$key] >= 0.6 ? '#ecfdf5' : '#fef2f2' }}; border-left-color: {{ $quality['reliability'][$key] >= 0.6 ? 'var(--secondary)' : 'var(--danger)' }};">
+                            <strong>Interpretasi Uji {{ $vars[$key]['label'] ?? strtoupper($key) }}:</strong> Nilai Cronbach's Alpha sebesar {{ $quality['reliability'][$key] }} menunjukkan instrumen ini <strong>{{ $quality['reliability'][$key] >= 0.6 ? 'Reliabel' : 'Tidak Reliabel' }}</strong>. Pada uji validitas Pearson, setiap butir pernyataan dengan nilai korelasi (r) &ge; 0.3 dinyatakan <strong>Valid</strong> dan layak digunakan.
+                        </div>
                     </div>
                 @endforeach
             </div>
-
-            @php
-                $vars = [
-                    'x1' => ['label' => 'Kapasitas Manajerial (X1)'],
-                    'x2' => ['label' => 'Tekanan Budaya (X2)'],
-                    'x3' => ['label' => 'Kelemahan Tata Kelola (X3)'],
-                    'y'  => ['label' => 'Kualitas Pelaporan (Y)']
-                ];
-            @endphp
 
             <div class="header" style="margin-top: 60px;">
                 <div>
@@ -258,6 +266,91 @@
                             Nilai $R^2$ sebesar {{ $regression['r2'] }} menunjukkan bahwa variabel independen mampu menjelaskan {{ $regression['r2'] * 100 }}% variasi dari variabel dependen.
                         </div>
                     </div>
+                </div>
+
+                <div class="narration-box" style="margin-top: 24px;">
+                    <strong>Interpretasi Regresi Linear Berganda:</strong><br>
+                    Persamaan regresi menunjukkan nilai konstanta (a) sebesar {{ $regression['a'] }}.<br>
+                    Koefisien <strong>Kapasitas (X1)</strong> sebesar {{ $regression['b1'] }} menunjukkan bahwa peningkatan 1 satuan kapasitas akan {{ $regression['b1'] >= 0 ? 'meningkatkan' : 'menurunkan' }} kualitas pelaporan sebesar {{ abs($regression['b1']) }}.<br>
+                    Koefisien <strong>Budaya (X2)</strong> sebesar {{ $regression['b2'] }} berarti peningkatan 1 satuan tekanan budaya akan {{ $regression['b2'] >= 0 ? 'meningkatkan' : 'menurunkan' }} kualitas pelaporan sebesar {{ abs($regression['b2']) }}.<br>
+                    Koefisien <strong>Tata Kelola (X3)</strong> sebesar {{ $regression['b3'] }} berarti peningkatan 1 satuan kelemahan tata kelola akan {{ $regression['b3'] >= 0 ? 'meningkatkan' : 'menurunkan' }} kualitas pelaporan sebesar {{ abs($regression['b3']) }}.<br>
+                    Nilai R-Squared ({{ $regression['r2'] }}) mengindikasikan bahwa ketiga variabel independen secara simultan memengaruhi Kualitas Pelaporan sebesar {{ $regression['r2'] * 100 }}%.
+                </div>
+
+                <div class="header" style="margin-top: 60px;">
+                    <div>
+                        <h2>Uji Hipotesis Penelitian</h2>
+                        <p style="color: var(--text-light);">Evaluasi rumusan hipotesis (H1-H4) berdasarkan arah dan nilai koefisien regresi.</p>
+                    </div>
+                </div>
+
+                <div class="chart-card" style="padding: 0; overflow: hidden;">
+                    <table class="table-stats" style="margin-top: 0;">
+                        <thead style="background: #f8fafc;">
+                            <tr>
+                                <th style="width: 5%;">Kode</th>
+                                <th style="width: 50%; text-align: left; padding-left: 20px;">Rumusan Hipotesis</th>
+                                <th style="width: 10%;">Arah</th>
+                                <th style="width: 15%;">Hasil Regresi</th>
+                                <th style="width: 20%;">Kesimpulan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 700;">H1</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Kapasitas manajerial pengelola, tekanan budaya relasional lokal, dan kelemahan tata kelola keuangan secara simultan berpengaruh signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td>Simultan</td>
+                                <td>$R^2$ = {{ $regression['r2'] }}</td>
+                                <td>
+                                    <span class="{{ $regression['r2'] > 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
+                                        {{ $regression['r2'] > 0 ? 'Terdukung' : 'Tidak Terdukung' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700;">H2</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Kapasitas manajerial pengelola berpengaruh positif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td>Positif</td>
+                                <td>$b_1$ = {{ $regression['b1'] }}</td>
+                                <td>
+                                    <span class="{{ $regression['b1'] > 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
+                                        {{ $regression['b1'] > 0 ? 'Terdukung' : 'Tidak Terdukung' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700;">H3</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Tekanan budaya relasional lokal berpengaruh negatif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td>Negatif</td>
+                                <td>$b_2$ = {{ $regression['b2'] }}</td>
+                                <td>
+                                    <span class="{{ $regression['b2'] < 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
+                                        {{ $regression['b2'] < 0 ? 'Terdukung' : 'Tidak Terdukung' }}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 700;">H4</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Kelemahan tata kelola keuangan berpengaruh negatif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td>Negatif</td>
+                                <td>$b_3$ = {{ $regression['b3'] }}</td>
+                                <td>
+                                    <span class="{{ $regression['b3'] < 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
+                                        {{ $regression['b3'] < 0 ? 'Terdukung' : 'Tidak Terdukung' }}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="narration-box" style="margin-top: 16px;">
+                    <strong>Interpretasi Uji Hipotesis:</strong><br>
+                    <strong>H1 (Simultan):</strong> Nilai $R^2$ sebesar {{ $regression['r2'] }} menunjukkan bahwa ketiga variabel independen secara bersama-sama memengaruhi Kualitas Pelaporan (Y), sehingga hipotesis <strong>{{ $regression['r2'] > 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
+                    <strong>H2 (Parsial X1):</strong> Koefisien $b_1$ bernilai {{ $regression['b1'] }}. Arah koefisien ini <strong>{{ $regression['b1'] > 0 ? 'positif (searah)' : 'negatif (berlawanan)' }}</strong> dengan hipotesis awal, sehingga H2 <strong>{{ $regression['b1'] > 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
+                    <strong>H3 (Parsial X2):</strong> Koefisien $b_2$ bernilai {{ $regression['b2'] }}. Arah koefisien ini <strong>{{ $regression['b2'] < 0 ? 'negatif (searah)' : 'positif (berlawanan)' }}</strong> dengan hipotesis awal, sehingga H3 <strong>{{ $regression['b2'] < 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
+                    <strong>H4 (Parsial X3):</strong> Koefisien $b_3$ bernilai {{ $regression['b3'] }}. Arah koefisien ini <strong>{{ $regression['b3'] < 0 ? 'negatif (searah)' : 'positif (berlawanan)' }}</strong> dengan hipotesis awal, sehingga H4 <strong>{{ $regression['b3'] < 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
+                    <span style="font-size: 0.8rem; color: var(--text-light); margin-top: 8px; display: block;"><em>*Catatan: Kesimpulan "Terdukung/Tidak Terdukung" ditarik murni berdasarkan perbandingan arah koefisien prediksi dengan arah hipotesis.</em></span>
                 </div>
             @else
                 <div class="chart-card" style="text-align: center; padding: 40px;">
