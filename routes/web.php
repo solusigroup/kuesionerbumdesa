@@ -42,6 +42,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/show/{id}', [AdminController::class, 'show'])->name('admin.show');
     Route::get('/export', [AdminController::class, 'export'])->name('admin.export');
+    Route::get('/whatsapp', [AdminController::class, 'whatsapp'])->name('admin.whatsapp');
     Route::get('/analysis', [AnalysisController::class, 'index'])->name('admin.analysis');
     Route::delete('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 });

@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Kuesioner BUMDesa</title>
+    <title>WhatsApp Blast - Kuesioner BUMDesa</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
+            --primary: #25d366;
+            --primary-hover: #128c7e;
             --bg: #f1f5f9;
             --card-bg: #ffffff;
             --text: #1e293b;
             --text-light: #64748b;
             --border: #e2e8f0;
-            --success: #10b981;
+            --wa-color: #25d366;
         }
 
         body {
@@ -43,7 +43,7 @@
             align-items: center;
             gap: 10px;
             font-weight: 700;
-            color: var(--primary);
+            color: #1e293b;
             text-decoration: none;
             font-size: 1.25rem;
         }
@@ -87,6 +87,7 @@
         .btn {
             display: inline-flex;
             align-items: center;
+            gap: 8px;
             padding: 10px 20px;
             border-radius: 8px;
             text-decoration: none;
@@ -97,11 +98,8 @@
             border: none;
         }
 
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); }
-
-        .btn-export { background: var(--success); color: white; }
-        .btn-export:hover { opacity: 0.9; }
+        .btn-wa { background: var(--wa-color); color: white; }
+        .btn-wa:hover { background: var(--primary-hover); }
 
         .card {
             background: var(--card-bg);
@@ -109,6 +107,42 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border);
             overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .template-section {
+            padding: 24px;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 4px;
         }
 
         .table-container {
@@ -158,6 +192,20 @@
             color: var(--text-light);
         }
 
+        .search-box {
+            padding: 16px 24px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
         @media (max-width: 768px) {
             .container { padding: 0 20px; }
             nav { padding: 16px 20px; }
@@ -174,8 +222,8 @@
         <div class="nav-links">
             <a href="{{ route('admin.dashboard') }}">Dashboard</a>
             <a href="{{ route('admin.analysis') }}">Analisis</a>
-            <a href="{{ route('admin.whatsapp') }}">WhatsApp</a>
-            <span>{{ auth()->user()->name }} (Superadmin)</span>
+            <a href="{{ route('admin.whatsapp') }}" style="color: var(--primary); font-weight: 700;">WhatsApp</a>
+            <span>{{ auth()->user()->name }}</span>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
         </div>
@@ -184,73 +232,55 @@
     <div class="container">
         <div class="header">
             <div>
-                <h1>Data Hasil Kuesioner</h1>
-                <p style="color: var(--text-light); margin-top: 4px;">Monitor dan ekspor seluruh hasil isian dari responden.</p>
+                <h1>WhatsApp Blast Dashboard</h1>
+                <p style="color: var(--text-light); margin-top: 4px;">Kirim pesan personalisasi ke responden kuesioner.</p>
             </div>
-            <div style="display: flex; gap: 12px;">
-                <a href="{{ route('admin.analysis') }}" class="btn btn-primary" style="background: #ffffff; color: var(--primary); border: 1px solid var(--primary);">
-                    📈 Lihat Analisis
-                </a>
-                <a href="{{ route('admin.export') }}" class="btn btn-export">
-                    📊 Ekspor ke Excel (CSV)
-                </a>
-            </div>
+            <a href="{{ route('admin.dashboard') }}" class="btn" style="background: white; border: 1px solid var(--border); color: var(--text);">
+                ← Kembali ke Dashboard
+            </a>
         </div>
 
-        @if(session('success')) 
-            <div style="background: #dcfce7; color: #15803d; padding: 16px; border-radius: 12px; margin-bottom: 24px; border: 1px solid #bbf7d0; font-weight: 500;">
-                {{ session('success') }}
-            </div> 
-        @endif
-
         <div class="card">
+            <div class="template-section">
+                <div class="form-group">
+                    <label for="template">Template Pesan</label>
+                    <textarea id="messageTemplate" placeholder="Tulis pesan Anda di sini...">Halo Bapak/Ibu [Nama], perkenalkan kami dari tim riset BUMDesa. Terima kasih telah mengisi kuesioner kami. Kami ingin mengonfirmasi...</textarea>
+                    <div class="hint">Gunakan <strong>[Nama]</strong> untuk menyebut nama responden secara otomatis.</div>
+                </div>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Cari nama, desa, atau nomor WA..." onkeyup="filterTable()">
+            </div>
+
             <div class="table-container">
-                <table>
+                <table id="respondentTable">
                     <thead>
                         <tr>
-                            <th>Waktu Submit</th>
-                            <th>Email Responden</th>
                             <th>Nama Responden</th>
-                            <th>Desa / Kec.</th>
+                            <th>Nomor WA</th>
                             <th>BUMDesa</th>
                             <th>Jabatan</th>
-                            <th>Total Skor</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($kuesioners as $k)
-                        @php
-                            $totalScore = $k->x1_1 + $k->x1_2 + $k->x1_3 + $k->x1_4 + $k->x1_5 +
-                                          $k->x2_1 + $k->x2_2 + $k->x2_3 + $k->x2_4 + $k->x2_5 +
-                                          $k->x3_1 + $k->x3_2 + $k->x3_3 + $k->x3_4 + $k->x3_5 +
-                                          $k->y1 + $k->y2 + $k->y3 + $k->y4 + $k->y5;
-                        @endphp
                         <tr>
-                            <td>{{ $k->created_at->format('d/m/Y H:i') }}</td>
-                            <td><span class="badge">{{ $k->user->email ?? '-' }}</span></td>
-                            <td>
-                                <a href="{{ route('admin.show', $k->id) }}" style="color: var(--primary); text-decoration: none; font-weight: 600;">
-                                    {{ $k->nama_responden }}
-                                </a>
-                            </td>
-                            <td style="font-size: 0.8rem; color: var(--text-light);">
-                                {{ $k->nama_desa }} / {{ $k->kecamatan }}
-                            </td>
+                            <td class="name-cell" data-name="{{ $k->nama_responden }}">{{ $k->nama_responden }}</td>
+                            <td class="wa-cell">{{ $k->nomor_wa }}</td>
                             <td>{{ $k->nama_bumdesa }}</td>
                             <td>{{ $k->jabatan }}</td>
-                            <td style="font-weight: 600; color: var(--primary);">{{ $totalScore }} / 100</td>
                             <td>
-                                <form action="{{ route('admin.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600; font-size: 0.85rem; padding: 0;">Hapus</button>
-                                </form>
+                                <button onclick="sendWA('{{ $k->nomor_wa }}', '{{ $k->nama_responden }}')" class="btn btn-wa">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                                    Kirim WA
+                                </button>
                             </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="empty">Belum ada data kuesioner yang disubmit.</td>
+                            <td colspan="5" class="empty">Belum ada data responden.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -258,5 +288,42 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function sendWA(phone, name) {
+            let template = document.getElementById('messageTemplate').value;
+            let message = template.replace('[Nama]', name);
+            
+            // Format phone number: remove non-digits, ensure starts with country code
+            let formattedPhone = phone.replace(/\D/g, '');
+            if (formattedPhone.startsWith('0')) {
+                formattedPhone = '62' + formattedPhone.substring(1);
+            } else if (!formattedPhone.startsWith('62')) {
+                formattedPhone = '62' + formattedPhone;
+            }
+
+            let url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function filterTable() {
+            let input = document.getElementById('searchInput');
+            let filter = input.value.toLowerCase();
+            let table = document.getElementById('respondentTable');
+            let tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                let show = false;
+                let tds = tr[i].getElementsByTagName('td');
+                for (let j = 0; j < tds.length - 1; j++) {
+                    if (tds[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        show = true;
+                        break;
+                    }
+                }
+                tr[i].style.display = show ? "" : "none";
+            }
+        }
+    </script>
 </body>
 </html>

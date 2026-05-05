@@ -14,6 +14,12 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('kuesioners'));
     }
 
+    public function whatsapp()
+    {
+        $kuesioners = Kuesioner::with('user')->latest()->get();
+        return view('admin.whatsapp', compact('kuesioners'));
+    }
+
     public function show($id)
     {
         $kuesioner = Kuesioner::with('user')->findOrFail($id);

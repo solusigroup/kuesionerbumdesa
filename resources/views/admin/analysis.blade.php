@@ -74,7 +74,10 @@
             <img src="{{ asset('img/logo.png') }}" alt="Logo">
             <span>BUMDesa Admin</span>
         </a>
-        <div>
+        <div class="nav-links">
+            <a href="{{ route('admin.dashboard') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">Dashboard</a>
+            <a href="{{ route('admin.analysis') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">Analisis</a>
+            <a href="{{ route('admin.whatsapp') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">WhatsApp</a>
             <a href="{{ route('admin.dashboard') }}" class="btn-nav-primary">Kembali ke Dashboard</a>
         </div>
     </nav>
