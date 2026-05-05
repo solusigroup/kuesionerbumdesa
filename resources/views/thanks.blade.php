@@ -66,7 +66,86 @@
         .footer-links a { text-decoration: none; color: var(--text-light); font-weight: 600; font-size: 0.9rem; transition: color 0.2s; }
         .footer-links a:hover { color: var(--primary); }
 
-        @media (max-width: 640px) { .grid-showcase { grid-template-columns: 1fr; } .promo-banner { padding: 32px 20px; } }
+        .guide-notification {
+            background: #fffbeb;
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 40px auto;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(245, 158, 11, 0.1);
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .guide-notification::before {
+            content: "PANDUAN";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        .guide-icon {
+            font-size: 2.5rem;
+            background: #fef3c7;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .guide-content h4 {
+            margin: 0 0 4px;
+            font-size: 1.1rem;
+            color: #92400e;
+        }
+
+        .guide-content p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #b45309;
+            line-height: 1.4;
+        }
+
+        .guide-link {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 2px solid var(--primary);
+            transition: all 0.2s;
+        }
+
+        .guide-link:hover {
+            color: var(--primary-hover);
+            border-bottom-color: var(--primary-hover);
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        @media (max-width: 640px) { 
+            .grid-showcase { grid-template-columns: 1fr; } 
+            .promo-banner { padding: 32px 20px; }
+            .guide-notification { flex-direction: column; text-align: center; }
+            .guide-icon { margin: 0 auto; }
+        }
     </style>
 </head>
 <body>
@@ -113,6 +192,14 @@
                     <div class="credential-item"><span>Pass:</span><span>admin123</span></div>
                 </div>
                 <a href="https://abyakta.simpleakunting.id" target="_blank" class="btn-visit">Coba Sekarang</a>
+            </div>
+        </div>
+        
+        <div class="guide-notification">
+            <div class="guide-icon">📖</div>
+            <div class="guide-content">
+                <h4>Pelajari Panduan Hibah SimpleAkunting</h4>
+                <p>Pastikan Anda memahami langkah-langkah untuk mendapatkan dukungan teknologi ini. Klik di sini: <a href="https://simpleakunting.my.id/panduanhibahSA.html" target="_blank" class="guide-link">Buka Panduan Hibah (HTML)</a></p>
             </div>
         </div>
 
