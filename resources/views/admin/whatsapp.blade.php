@@ -266,7 +266,7 @@
                 <div class="form-group">
                     <label for="template">Template Pesan</label>
                     <textarea id="messageTemplate"
-                        placeholder="Tulis pesan Anda di sini...">Halo Bapak/Ibu [Nama], perkenalkan kami dari tim riset BUMDesa. Terima kasih telah mengisi kuesioner kami. Kami ingin mengonfirmasikan jika menghendaki mendapatkan hibah source aplikasi akuntansi SimpleAkunting, silakan mempelajari panduannya di https://simpleakunting.my.id/panduanhibahSA.html...terimakasih</textarea>
+                        placeholder="Tulis pesan Anda di sini...">Halo Bapak/Ibu [Nama], perkenalkan kami dari tim riset BUMDesa. Terima kasih telah mengisi kuesioner kami. Kami ingin mengonfirmasikan jika menghendaki mendapatkan hibah source aplikasi akuntansi SimpleAkunting, silakan mempelajari panduannya di https://simpleakunting.my.id/panduanhibahSA.html</textarea>
                     <div class="hint">Gunakan <strong>[Nama]</strong> untuk menyebut nama responden secara otomatis.
                     </div>
                 </div>
