@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,6 +48,7 @@
             text-decoration: none;
             font-size: 1.25rem;
         }
+
         .logo img {
             height: 40px;
             object-fit: contain;
@@ -98,8 +100,14 @@
             border: none;
         }
 
-        .btn-wa { background: var(--wa-color); color: white; }
-        .btn-wa:hover { background: var(--primary-hover); }
+        .btn-wa {
+            background: var(--wa-color);
+            color: white;
+        }
+
+        .btn-wa:hover {
+            background: var(--primary-hover);
+        }
 
         .card {
             background: var(--card-bg);
@@ -207,12 +215,23 @@
         }
 
         @media (max-width: 768px) {
-            .container { padding: 0 20px; }
-            nav { padding: 16px 20px; }
-            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .container {
+                padding: 0 20px;
+            }
+
+            nav {
+                padding: 16px 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
         }
     </style>
 </head>
+
 <body>
     <nav>
         <a href="/" class="logo">
@@ -233,9 +252,11 @@
         <div class="header">
             <div>
                 <h1>WhatsApp Blast Dashboard</h1>
-                <p style="color: var(--text-light); margin-top: 4px;">Kirim pesan personalisasi ke responden kuesioner.</p>
+                <p style="color: var(--text-light); margin-top: 4px;">Kirim pesan personalisasi ke responden kuesioner.
+                </p>
             </div>
-            <a href="{{ route('admin.dashboard') }}" class="btn" style="background: white; border: 1px solid var(--border); color: var(--text);">
+            <a href="{{ route('admin.dashboard') }}" class="btn"
+                style="background: white; border: 1px solid var(--border); color: var(--text);">
                 ← Kembali ke Dashboard
             </a>
         </div>
@@ -244,13 +265,16 @@
             <div class="template-section">
                 <div class="form-group">
                     <label for="template">Template Pesan</label>
-                    <textarea id="messageTemplate" placeholder="Tulis pesan Anda di sini...">Halo Bapak/Ibu [Nama], perkenalkan kami dari tim riset BUMDesa. Terima kasih telah mengisi kuesioner kami. Kami ingin mengonfirmasi...</textarea>
-                    <div class="hint">Gunakan <strong>[Nama]</strong> untuk menyebut nama responden secara otomatis.</div>
+                    <textarea id="messageTemplate"
+                        placeholder="Tulis pesan Anda di sini...">Halo Bapak/Ibu [Nama], perkenalkan kami dari tim riset BUMDesa. Terima kasih telah mengisi kuesioner kami. Kami ingin mengonfirmasikan jika menghendaki mendapatkan hibah source aplikasi akuntansi SimpleAkunting, silakan mempelajari panduannya di https://simpleakunting.my.id/panduanhibahSA.html...terimakasih</textarea>
+                    <div class="hint">Gunakan <strong>[Nama]</strong> untuk menyebut nama responden secara otomatis.
+                    </div>
                 </div>
             </div>
 
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Cari nama, desa, atau nomor WA..." onkeyup="filterTable()">
+                <input type="text" id="searchInput" placeholder="Cari nama, desa, atau nomor WA..."
+                    onkeyup="filterTable()">
             </div>
 
             <div class="table-container">
@@ -266,22 +290,27 @@
                     </thead>
                     <tbody>
                         @forelse($kuesioners as $k)
-                        <tr>
-                            <td class="name-cell" data-name="{{ $k->nama_responden }}">{{ $k->nama_responden }}</td>
-                            <td class="wa-cell">{{ $k->nomor_wa }}</td>
-                            <td>{{ $k->nama_bumdesa }}</td>
-                            <td>{{ $k->jabatan }}</td>
-                            <td>
-                                <button onclick="sendWA('{{ $k->nomor_wa }}', '{{ $k->nama_responden }}')" class="btn btn-wa">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                                    Kirim WA
-                                </button>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="name-cell" data-name="{{ $k->nama_responden }}">{{ $k->nama_responden }}</td>
+                                <td class="wa-cell">{{ $k->nomor_wa }}</td>
+                                <td>{{ $k->nama_bumdesa }}</td>
+                                <td>{{ $k->jabatan }}</td>
+                                <td>
+                                    <button onclick="sendWA('{{ $k->nomor_wa }}', '{{ $k->nama_responden }}')"
+                                        class="btn btn-wa">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M22 2L11 13"></path>
+                                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                        </svg>
+                                        Kirim WA
+                                    </button>
+                                </td>
+                            </tr>
                         @empty
-                        <tr>
-                            <td colspan="5" class="empty">Belum ada data responden.</td>
-                        </tr>
+                            <tr>
+                                <td colspan="5" class="empty">Belum ada data responden.</td>
+                            </tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -293,7 +322,7 @@
         function sendWA(phone, name) {
             let template = document.getElementById('messageTemplate').value;
             let message = template.replace('[Nama]', name);
-            
+
             // Format phone number: remove non-digits, ensure starts with country code
             let formattedPhone = phone.replace(/\D/g, '');
             if (formattedPhone.startsWith('0')) {
@@ -326,4 +355,5 @@
         }
     </script>
 </body>
+
 </html>
