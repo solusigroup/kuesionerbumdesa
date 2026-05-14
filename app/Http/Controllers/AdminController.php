@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kuesioner;
+use App\Models\Winner;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
@@ -130,5 +131,41 @@ class AdminController extends Controller
         $kuesioner->delete();
 
         return redirect()->route('admin.dashboard')->with('success', 'Data kuesioner berhasil dihapus.');
+    }
+
+    public function lottery()
+    {
+        $winners = Winner::with('kuesioner')->get();
+        
+        $candidates = Kuesioner::select('*')
+            ->selectRaw('(x1_1 + x1_2 + x1_3 + x1_4 + x1_5 + x2_1 + x2_2 + x2_3 + x2_4 + x2_5 + x3_1 + x3_2 + x3_3 + x3_4 + x3_5 + y1 + y2 + y3 + y4 + y5) as total_score')
+            ->orderByDesc('total_score')
+            ->limit(10)
+            ->get();
+
+        return view('admin.lottery', compact('winners', 'candidates'));
+    }
+
+    public function performLottery()
+    {
+        // Clear old winners
+        Winner::truncate();
+
+        // Get top 10 candidates
+        $candidates = Kuesioner::select('*')
+            ->selectRaw('(x1_1 + x1_2 + x1_3 + x1_4 + x1_5 + x2_1 + x2_2 + x2_3 + x2_4 + x2_5 + x3_1 + x3_2 + x3_3 + x3_4 + x3_5 + y1 + y2 + y3 + y4 + y5) as total_score')
+            ->orderByDesc('total_score')
+            ->limit(10)
+            ->get();
+
+        if ($candidates->count() > 0) {
+            // Draw 3 random ones from top 10
+            $luckyOnes = $candidates->random(min(3, $candidates->count()));
+            foreach ($luckyOnes as $lucky) {
+                Winner::create(['kuesioner_id' => $lucky->id]);
+            }
+        }
+
+        return redirect()->route('admin.lottery')->with('success', 'Pengundian berhasil dilakukan!');
     }
 }

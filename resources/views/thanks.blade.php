@@ -113,6 +113,77 @@
             flex-shrink: 0;
         }
 
+        .winners-announcement {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+            border-radius: 20px;
+            padding: 32px;
+            color: white;
+            margin-top: 40px;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winners-announcement::before {
+            content: "🎉";
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-size: 5rem;
+            opacity: 0.2;
+            transform: rotate(-20deg);
+        }
+
+        .winners-announcement h3 {
+            margin: 0 0 16px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .winner-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .winner-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .winner-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .winner-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .winner-bumdesa {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .winner-prize {
+            margin-top: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: #f59e0b;
+            color: white;
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+
         .guide-content h4 {
             margin: 0 0 4px;
             font-size: 1.1rem;
@@ -193,6 +264,32 @@
                 </div>
                 <a href="https://abyakta.simpleakunting.id" target="_blank" class="btn-visit">Coba Sekarang</a>
             </div>
+        </div>
+
+        @if($winners->count() > 0)
+        <div class="winners-announcement">
+            <h3>🏆 Pengumuman Pemenang Lucky Draw</h3>
+            <p>Selamat kepada responden terbaik yang beruntung mendapatkan <strong>SimpleAkunting v3.5 Free selama 2 Tahun</strong>!</p>
+            
+            <div class="winner-cards">
+                @foreach($winners as $winner)
+                <div class="winner-card">
+                    <div class="winner-name">{{ $winner->kuesioner->nama_responden }}</div>
+                    <div class="winner-bumdesa">{{ $winner->kuesioner->nama_bumdesa }}</div>
+                    <div class="winner-bumdesa" style="font-size: 0.75rem;">{{ $winner->kuesioner->kabupaten_kota }}</div>
+                    <div class="winner-prize">FREE 2 TAHUN</div>
+                </div>
+                @endforeach
+            </div>
+            
+            <p style="margin-top: 24px; font-size: 0.9rem; opacity: 0.9;">
+                Tim kami akan menghubungi Anda melalui nomor WhatsApp yang terdaftar untuk proses penyerahan hadiah.
+            </p>
+        </div>
+        @endif
+
+        <div style="margin-top: 32px;">
+            <a href="/" class="btn-back">Kembali ke Beranda</a>
         </div>
         
         <div class="guide-notification">

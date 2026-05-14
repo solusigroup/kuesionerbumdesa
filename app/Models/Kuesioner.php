@@ -34,8 +34,23 @@ class Kuesioner extends Model
         'perbaikan_dibutuhkan',
     ];
 
+    protected $appends = ['score'];
+
+    public function getScoreAttribute()
+    {
+        return $this->x1_1 + $this->x1_2 + $this->x1_3 + $this->x1_4 + $this->x1_5 +
+               $this->x2_1 + $this->x2_2 + $this->x2_3 + $this->x2_4 + $this->x2_5 +
+               $this->x3_1 + $this->x3_2 + $this->x3_3 + $this->x3_4 + $this->x3_5 +
+               $this->y1 + $this->y2 + $this->y3 + $this->y4 + $this->y5;
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function winner()
+    {
+        return $this->hasOne(Winner::class);
     }
 }

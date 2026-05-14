@@ -88,6 +88,7 @@ class KuesionerController extends Controller
 
     public function thanks()
     {
-        return view('thanks');
+        $winners = \App\Models\Winner::with('kuesioner')->get();
+        return view('thanks', compact('winners'));
     }
 }
