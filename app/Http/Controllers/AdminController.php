@@ -8,16 +8,52 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $kuesioners = Kuesioner::with('user')->latest()->get();
-        return view('admin.dashboard', compact('kuesioners'));
+        $query = Kuesioner::with('user')->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_responden', 'like', "%{$search}%")
+                  ->orWhere('nama_bumdesa', 'like', "%{$search}%")
+                  ->orWhere('nama_desa', 'like', "%{$search}%")
+                  ->orWhere('kecamatan', 'like', "%{$search}%")
+                  ->orWhere('kabupaten_kota', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('kabupaten_kota')) {
+            $query->where('kabupaten_kota', $request->kabupaten_kota);
+        }
+
+        $kuesioners = $query->get();
+        $kabupaten_list = Kuesioner::distinct()->whereNotNull('kabupaten_kota')->pluck('kabupaten_kota');
+
+        return view('admin.dashboard', compact('kuesioners', 'kabupaten_list'));
     }
 
-    public function whatsapp()
+    public function whatsapp(Request $request)
     {
-        $kuesioners = Kuesioner::with('user')->latest()->get();
-        return view('admin.whatsapp', compact('kuesioners'));
+        $query = Kuesioner::with('user')->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_responden', 'like', "%{$search}%")
+                  ->orWhere('nama_bumdesa', 'like', "%{$search}%")
+                  ->orWhere('nomor_wa', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('kabupaten_kota')) {
+            $query->where('kabupaten_kota', $request->kabupaten_kota);
+        }
+
+        $kuesioners = $query->get();
+        $kabupaten_list = Kuesioner::distinct()->whereNotNull('kabupaten_kota')->pluck('kabupaten_kota');
+
+        return view('admin.whatsapp', compact('kuesioners', 'kabupaten_list'));
     }
 
     public function show($id)

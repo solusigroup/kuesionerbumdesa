@@ -158,10 +158,52 @@
             color: var(--text-light);
         }
 
+        .filter-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .filter-control {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-control:focus {
+            border-color: var(--primary);
+        }
+
         @media (max-width: 768px) {
             .container { padding: 0 20px; }
             nav { padding: 16px 20px; }
             .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .filter-section { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -202,6 +244,28 @@
                 {{ session('success') }}
             </div> 
         @endif
+
+        <form action="{{ route('admin.dashboard') }}" method="GET" class="filter-section">
+            <div class="filter-group">
+                <label for="search">Pencarian</label>
+                <input type="text" name="search" id="search" class="filter-control" placeholder="Cari nama, desa, BUMDesa..." value="{{ request('search') }}">
+            </div>
+            <div class="filter-group">
+                <label for="kabupaten_kota">Kabupaten/Kota</label>
+                <select name="kabupaten_kota" id="kabupaten_kota" class="filter-control">
+                    <option value="">Semua Kabupaten/Kota</option>
+                    @foreach($kabupaten_list as $kab)
+                        <option value="{{ $kab }}" {{ request('kabupaten_kota') == $kab ? 'selected' : '' }}>
+                            {{ $kab }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button type="submit" class="btn btn-primary">Cari</button>
+                <a href="{{ route('admin.dashboard') }}" class="btn" style="background: #f1f5f9; color: var(--text);">Reset</a>
+            </div>
+        </form>
 
         <div class="card">
             <div class="table-container">

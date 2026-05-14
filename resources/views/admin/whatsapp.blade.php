@@ -214,20 +214,52 @@
             font-size: 0.9rem;
         }
 
+        .filter-section {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .filter-control {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .filter-control:focus {
+            border-color: var(--primary);
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 0 20px;
-            }
-
-            nav {
-                padding: 16px 20px;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
-            }
+            .container { padding: 0 20px; }
+            nav { padding: 16px 20px; }
+            .header { flex-direction: column; align-items: flex-start; gap: 16px; }
+            .filter-section { flex-direction: column; align-items: stretch; }
         }
     </style>
 </head>
@@ -261,21 +293,30 @@
             </a>
         </div>
 
+        <form action="{{ route('admin.whatsapp') }}" method="GET" class="filter-section">
+            <div class="filter-group">
+                <label for="search">Pencarian</label>
+                <input type="text" name="search" id="search" class="filter-control" placeholder="Cari nama, BUMDesa, nomor WA..." value="{{ request('search') }}">
+            </div>
+            <div class="filter-group">
+                <label for="kabupaten_kota">Kabupaten/Kota</label>
+                <select name="kabupaten_kota" id="kabupaten_kota" class="filter-control">
+                    <option value="">Semua Kabupaten/Kota</option>
+                    @foreach($kabupaten_list as $kab)
+                        <option value="{{ $kab }}" {{ request('kabupaten_kota') == $kab ? 'selected' : '' }}>
+                            {{ $kab }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button type="submit" class="btn btn-wa" style="height: 42px;">Cari</button>
+                <a href="{{ route('admin.whatsapp') }}" class="btn" style="background: #f1f5f9; color: var(--text); height: 42px; display: flex; align-items: center;">Reset</a>
+            </div>
+        </form>
+
         <div class="card">
             <div class="template-section">
-                <div class="form-group">
-                    <label for="template">Template Pesan</label>
-                    <textarea id="messageTemplate"
-                        placeholder="Tulis pesan Anda di sini...">Halo Bapak/Ibu [Nama], perkenalkan kami dari tim riset BUMDesa. Terima kasih telah mengisi kuesioner kami. Kami ingin mengonfirmasikan jika menghendaki mendapatkan hibah source aplikasi akuntansi SimpleAkunting, silakan mempelajari panduannya di https://simpleakunting.my.id/panduanhibahSA.html</textarea>
-                    <div class="hint">Gunakan <strong>[Nama]</strong> untuk menyebut nama responden secara otomatis.
-                    </div>
-                </div>
-            </div>
-
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Cari nama, desa, atau nomor WA..."
-                    onkeyup="filterTable()">
-            </div>
 
             <div class="table-container">
                 <table id="respondentTable">
@@ -333,25 +374,6 @@
 
             let url = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
-        }
-
-        function filterTable() {
-            let input = document.getElementById('searchInput');
-            let filter = input.value.toLowerCase();
-            let table = document.getElementById('respondentTable');
-            let tr = table.getElementsByTagName('tr');
-
-            for (let i = 1; i < tr.length; i++) {
-                let show = false;
-                let tds = tr[i].getElementsByTagName('td');
-                for (let j = 0; j < tds.length - 1; j++) {
-                    if (tds[j].textContent.toLowerCase().indexOf(filter) > -1) {
-                        show = true;
-                        break;
-                    }
-                }
-                tr[i].style.display = show ? "" : "none";
-            }
         }
     </script>
 </body>
