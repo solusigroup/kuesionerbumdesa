@@ -212,6 +212,7 @@
                             <th>Email Responden</th>
                             <th>Nama Responden</th>
                             <th>Desa / Kec.</th>
+                            <th>Kabupaten/Kota</th>
                             <th>BUMDesa</th>
                             <th>Jabatan</th>
                             <th>Total Skor</th>
@@ -237,6 +238,7 @@
                             <td style="font-size: 0.8rem; color: var(--text-light);">
                                 {{ $k->nama_desa }} / {{ $k->kecamatan }}
                             </td>
+                            <td>{{ $k->kabupaten_kota }}</td>
                             <td>{{ $k->nama_bumdesa }}</td>
                             <td>{{ $k->jabatan }}</td>
                             <td style="font-weight: 600; color: var(--primary);">{{ $totalScore }} / 100</td>
@@ -250,7 +252,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="empty">Belum ada data kuesioner yang disubmit.</td>
+                            <td colspan="9" class="empty">Belum ada data kuesioner yang disubmit.</td>
                         </tr>
                         @endforelse
                     </tbody>
