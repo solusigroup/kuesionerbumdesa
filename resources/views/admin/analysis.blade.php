@@ -70,15 +70,23 @@
 </head>
 <body>
     <nav>
-        <a href="{{ route('admin.dashboard') }}" class="logo">
+        <a href="{{ auth()->check() && auth()->user()->role === 'superadmin' ? route('admin.dashboard') : '/' }}" class="logo">
             <img src="{{ asset('img/logo.png') }}" alt="Logo">
-            <span>BUMDesa Admin</span>
+            <span>BUMDesa Analysis</span>
         </a>
         <div class="nav-links">
-            <a href="{{ route('admin.dashboard') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">Dashboard</a>
-            <a href="{{ route('admin.analysis') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">Analisis</a>
-            <a href="{{ route('admin.whatsapp') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">WhatsApp</a>
-            <a href="{{ route('admin.dashboard') }}" class="btn-nav-primary">Kembali ke Dashboard</a>
+            @auth
+                @if(auth()->user()->role === 'superadmin')
+                    <a href="{{ route('admin.dashboard') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">Dashboard</a>
+                    <a href="{{ route('admin.analysis') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">Analisis</a>
+                    <a href="{{ route('admin.whatsapp') }}" style="text-decoration: none; color: var(--text-light); font-size: 0.9rem; font-weight: 500;">WhatsApp</a>
+                    <a href="{{ route('admin.dashboard') }}" class="btn-nav-primary">Kembali ke Dashboard</a>
+                @else
+                    <a href="/" class="btn-nav-primary">Halaman Utama</a>
+                @endif
+            @else
+                <a href="/" class="btn-nav-primary">Halaman Utama</a>
+            @endauth
         </div>
     </nav>
 
@@ -87,7 +95,7 @@
             <div style="text-align: center; padding: 100px 0;">
                 <h2 style="font-size: 2rem; color: var(--text-light);">Belum ada data untuk dianalisis.</h2>
                 <p>Dashboard analisis akan aktif setelah responden mengisi kuesioner.</p>
-                <a href="{{ route('admin.dashboard') }}" style="color: var(--primary); text-decoration: none; font-weight: 700;">&larr; Kembali</a>
+                <a href="{{ auth()->check() && auth()->user()->role === 'superadmin' ? route('admin.dashboard') : '/' }}" style="color: var(--primary); text-decoration: none; font-weight: 700;">&larr; Kembali</a>
             </div>
         @else
             <div class="header">

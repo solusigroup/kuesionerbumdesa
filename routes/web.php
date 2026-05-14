@@ -45,6 +45,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/whatsapp', [AdminController::class, 'whatsapp'])->name('admin.whatsapp');
     Route::get('/lottery', [AdminController::class, 'lottery'])->name('admin.lottery');
     Route::post('/lottery/draw', [AdminController::class, 'performLottery'])->name('admin.lottery.draw');
-    Route::get('/analysis', [AnalysisController::class, 'index'])->name('admin.analysis');
     Route::delete('/destroy/{id}', [AdminController::class, 'destroy'])->name('admin.destroy');
 });
+
+Route::get('/analysis', [AnalysisController::class, 'index'])->name('admin.analysis');
