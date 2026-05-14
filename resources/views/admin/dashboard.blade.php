@@ -217,6 +217,7 @@
             <a href="{{ route('admin.dashboard') }}">Dashboard</a>
             <a href="{{ route('admin.analysis') }}">Analisis</a>
             <a href="{{ route('admin.whatsapp') }}">WhatsApp</a>
+            <a href="{{ route('admin.lottery') }}">Pengundian</a>
             <span>{{ auth()->user()->name }} (Superadmin)</span>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
