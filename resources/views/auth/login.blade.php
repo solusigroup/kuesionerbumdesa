@@ -124,14 +124,6 @@
         <h2>Selamat Datang Kembali</h2>
         <p class="subtitle">Masuk ke akun Anda untuk melanjutkan.</p>
 
-        @if ($errors->any())
-            <div class="alert-error">
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
-
         @if (session('success'))
             <div style="background-color: #d1fae5; color: #065f46; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
                 {{ session('success') }}
@@ -148,19 +140,25 @@
             @csrf
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required autofocus value="{{ old('email') }}">
+                <input type="email" id="email" name="email" required autofocus value="{{ old('email') }}" style="{{ $errors->has('email') ? 'border-color: #ef4444;' : '' }}">
+                @error('email')
+                    <div style="color: #ef4444; font-size: 0.8rem; margin-top: 4px;">{{ $message }}</div>
+                @enderror
             </div>
             
             <div id="passwordSection" style="display: none;">
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="password" name="password">
+                        <input type="password" id="password" name="password" style="{{ $errors->has('password') ? 'border-color: #ef4444;' : '' }}">
                         <input type="hidden" name="password_mode" id="passwordMode" value="0">
                         <button type="button" class="toggle-password" onclick="togglePassword('password', this)" tabindex="-1">
                             👁️
                         </button>
                     </div>
+                    @error('password')
+                        <div style="color: #ef4444; font-size: 0.8rem; margin-top: 4px;">{{ $message }}</div>
+                    @enderror
                 </div>
             </div>
 

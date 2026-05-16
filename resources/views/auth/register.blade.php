@@ -124,28 +124,26 @@
         <h2>Daftar Akun</h2>
         <p class="subtitle">Buat akun untuk berpartisipasi dalam penelitian.</p>
 
-        @if ($errors->any())
-            <div class="alert-error">
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
-
         <form action="{{ route('register') }}" method="POST">
             @csrf
             <div class="form-group">
                 <label for="name">Nama Lengkap</label>
-                <input type="text" id="name" name="name" required autofocus value="{{ old('name') }}">
+                <input type="text" id="name" name="name" required autofocus value="{{ old('name') }}" style="{{ $errors->has('name') ? 'border-color: #ef4444;' : '' }}">
+                @error('name')
+                    <div style="color: #ef4444; font-size: 0.8rem; margin-top: 4px;">{{ $message }}</div>
+                @enderror
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" required value="{{ old('email') }}">
+                <input type="email" id="email" name="email" required value="{{ old('email') }}" style="{{ $errors->has('email') ? 'border-color: #ef4444;' : '' }}">
+                @error('email')
+                    <div style="color: #ef4444; font-size: 0.8rem; margin-top: 4px;">{{ $message }}</div>
+                @enderror
             </div>
             <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 20px;">
                 * Verifikasi akan dikirimkan ke email Anda. Password hanya diperlukan saat melihat hasil penelitian.
             </p>
-            <button type="submit">Daftar</button>
+            <button type="submit">Daftar Sekarang</button>
         </form>
 
         <div class="links">
