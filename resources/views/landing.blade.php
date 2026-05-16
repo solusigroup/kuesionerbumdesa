@@ -418,9 +418,8 @@
             <div class="guide-step">
                 <div class="step-number">1</div>
                 <div class="step-content">
-                    <h3>Registrasi & Login</h3>
-                    <p>Mulai langkah awal dengan membuat akun baru melalui tombol Register. Jika Anda sudah pernah
-                        mendaftar, cukup gunakan menu Login untuk masuk ke dalam sistem dengan kredensial Anda.</p>
+                    <h3>Akses Cepat Tanpa Password</h3>
+                    <p>Klik tombol <strong>Ikut Berpartisipasi</strong> untuk mendaftar hanya dengan Nama & Email. Akun Anda akan langsung aktif tanpa perlu verifikasi email atau password. Jika sudah terdaftar, cukup masukkan email Anda di menu Login untuk masuk seketika.</p>
                 </div>
                 <div class="step-image">
                     <img src="{{ asset('img/guide/step1.png') }}" class="crop-center" alt="Registrasi dan Login">
