@@ -162,7 +162,7 @@
                 </div>
             </div>
 
-            <button type="submit" id="submitBtn">Kirim Link Login</button>
+            <button type="submit" id="submitBtn">Masuk</button>
             
             <div style="text-align: center; margin-top: 15px;">
                 <button type="button" onclick="toggleMode()" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.85rem;" id="modeToggle">
@@ -204,7 +204,7 @@
             } else {
                 section.style.display = 'none';
                 mode.value = '0';
-                btn.textContent = 'Kirim Link Login';
+                btn.textContent = 'Masuk';
                 toggle.textContent = 'Masuk dengan Password';
                 passwordInput.required = false;
             }

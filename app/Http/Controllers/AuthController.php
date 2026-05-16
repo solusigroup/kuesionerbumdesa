@@ -27,12 +27,12 @@ class AuthController extends Controller
 
         if (!$user) {
             return back()->withErrors([
-                'email' => 'Informasi akun yang Anda masukkan tidak sesuai.',
-            ])->onlyInput('email');
+                'email' => 'Email tidak terdaftar. Silakan daftar terlebih dahulu.',
+            ])->withInput();
         }
 
-        // If it's a superadmin, they must use a password
-        if ($user->role === 'superadmin' || $request->has('password_mode')) {
+        // Jika Superadmin, wajib pakai password
+        if ($user->role === 'superadmin' || $request->has('password_mode') && $request->password_mode == '1') {
             $credentials = $request->validate([
                 'email' => ['required', 'email'],
                 'password' => ['required'],
@@ -54,48 +54,9 @@ class AuthController extends Controller
             ])->onlyInput('email');
         }
 
-        // For respondents, send magic link
-        return $this->sendMagicLink($request);
-    }
-
-    public function sendMagicLink(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
-            return back()->withErrors(['email' => 'Email tidak terdaftar. Silakan daftar terlebih dahulu.']);
-        }
-
-        $token = Str::random(64);
-        $user->update([
-            'login_token' => $token,
-            'login_token_expires_at' => now()->addMinutes(30),
-        ]);
-
-        $url = route('login.verify', ['token' => $token]);
-        Mail::to($user->email)->send(new MagicLinkMail($url));
-
-        return back()->with('success', 'Link login telah dikirim ke email Anda. Silakan cek kotak masuk atau spam.');
-    }
-
-    public function verifyMagicLink($token)
-    {
-        $user = User::where('login_token', $token)
-            ->where('login_token_expires_at', '>', now())
-            ->first();
-
-        if (!$user) {
-            return redirect()->route('login')->with('error', 'Link tidak valid atau sudah kedaluwarsa.');
-        }
-
-        $user->update([
-            'login_token' => null,
-            'login_token_expires_at' => null,
-        ]);
-
+        // Untuk Responden: LANGSUNG LOGIN (Sangat Simple)
         Auth::login($user);
-        session()->regenerate();
+        $request->session()->regenerate();
 
         return redirect()->route('kuesioner.create');
     }
@@ -115,15 +76,16 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => null, // No password initially
+            'password' => null,
             'is_password_set' => false,
             'role' => 'respondent',
+            'email_verified_at' => now(), // Langsung anggap terverifikasi
         ]);
 
         Auth::login($user);
-        $user->sendEmailVerificationNotification();
+        $request->session()->regenerate();
 
-        return redirect()->route('verification.notice');
+        return redirect()->route('kuesioner.create');
     }
 
     public function showSetPassword()
