@@ -12,6 +12,17 @@ class KuesionerController extends Controller
      */
     public function index()
     {
+        if (auth()->user()->role === 'respondent') {
+            if (!auth()->user()->is_password_set) {
+                return redirect()->route('password.set')->with('info', 'Anda wajib mengatur password untuk melihat hasil.');
+            }
+            
+            $passwordConfirmedAt = session('password_confirmed_at', 0);
+            if (now()->timestamp - $passwordConfirmedAt > 3600) {
+                return redirect()->route('password.confirm_view')->with('info', 'Silakan masukkan password untuk melihat hasil.');
+            }
+        }
+
         $kuesioners = Kuesioner::where('user_id', auth()->id())->latest()->get();
         return view('kuesioner', compact('kuesioners'));
     }

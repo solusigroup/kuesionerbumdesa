@@ -132,22 +132,45 @@
             </div>
         @endif
 
-        <form action="{{ route('login') }}" method="POST">
+        @if (session('success'))
+            <div style="background-color: #d1fae5; color: #065f46; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div style="background-color: #fee2e2; color: #991b1b; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem;">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        <form action="{{ route('login') }}" method="POST" id="loginForm">
             @csrf
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required autofocus value="{{ old('email') }}">
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password" name="password" required>
-                    <button type="button" class="toggle-password" onclick="togglePassword('password', this)" tabindex="-1">
-                        👁️
-                    </button>
+            
+            <div id="passwordSection" style="display: none;">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password">
+                        <input type="hidden" name="password_mode" id="passwordMode" value="0">
+                        <button type="button" class="toggle-password" onclick="togglePassword('password', this)" tabindex="-1">
+                            👁️
+                        </button>
+                    </div>
                 </div>
             </div>
-            <button type="submit">Masuk</button>
+
+            <button type="submit" id="submitBtn">Kirim Link Login</button>
+            
+            <div style="text-align: center; margin-top: 15px;">
+                <button type="button" onclick="toggleMode()" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.85rem;" id="modeToggle">
+                    Masuk dengan Password
+                </button>
+            </div>
         </form>
 
         <div class="links">
@@ -164,6 +187,28 @@
             } else {
                 input.type = 'password';
                 button.textContent = '👁️';
+            }
+        }
+
+        function toggleMode() {
+            const section = document.getElementById('passwordSection');
+            const mode = document.getElementById('passwordMode');
+            const btn = document.getElementById('submitBtn');
+            const toggle = document.getElementById('modeToggle');
+            const passwordInput = document.getElementById('password');
+
+            if (section.style.display === 'none') {
+                section.style.display = 'block';
+                mode.value = '1';
+                btn.textContent = 'Masuk';
+                toggle.textContent = 'Masuk tanpa Password';
+                passwordInput.required = true;
+            } else {
+                section.style.display = 'none';
+                mode.value = '0';
+                btn.textContent = 'Kirim Link Login';
+                toggle.textContent = 'Masuk dengan Password';
+                passwordInput.required = false;
             }
         }
     </script>

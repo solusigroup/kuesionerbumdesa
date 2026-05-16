@@ -142,24 +142,9 @@
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required value="{{ old('email') }}">
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password" name="password" required>
-                    <button type="button" class="toggle-password" onclick="togglePassword('password', this)" tabindex="-1">
-                        👁️
-                    </button>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="password_confirmation">Konfirmasi Password</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password_confirmation" name="password_confirmation" required>
-                    <button type="button" class="toggle-password" onclick="togglePassword('password_confirmation', this)" tabindex="-1">
-                        👁️
-                    </button>
-                </div>
-            </div>
+            <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 20px;">
+                * Verifikasi akan dikirimkan ke email Anda. Password hanya diperlukan saat melihat hasil penelitian.
+            </p>
             <button type="submit">Daftar</button>
         </form>
 
