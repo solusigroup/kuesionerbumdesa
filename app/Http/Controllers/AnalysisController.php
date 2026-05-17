@@ -194,12 +194,52 @@ class AnalysisController extends Controller
         }
         $rSquared = $ssTot == 0 ? 0 : 1 - ($ssRes / $ssTot);
 
+        // --- Tambahan Uji F, Uji t, dan Standard Error ---
+        $p = 4; // Jumlah parameter (1 konstanta + 3 variabel independen)
+        $k = 3; // Jumlah variabel independen
+        
+        $fValue = 0;
+        $se = array_fill(0, $p, 0);
+        $t = array_fill(0, $p, 0);
+
+        // Hanya bisa dihitung jika df residual > 0 (jumlah sampel > jumlah parameter)
+        if ($n > $p) {
+            $ssReg = $ssTot - $ssRes;
+            $msReg = $ssReg / $k;
+            $msRes = $ssRes / ($n - $p);
+            
+            // Uji F
+            $fValue = $msRes > 0 ? $msReg / $msRes : 0;
+
+            // Invers dari (X'X) untuk mendapatkan varians-kovarians koefisien
+            $XTX_inv = $this->invertMatrix($XTX);
+            
+            if ($XTX_inv) {
+                for ($i = 0; $i < $p; $i++) {
+                    $var_coef = $msRes * $XTX_inv[$i][$i];
+                    // Standard Error (SE)
+                    $se[$i] = $var_coef > 0 ? sqrt($var_coef) : 0;
+                    // Uji t (t-hitung)
+                    $t[$i]  = $se[$i] > 0 ? $b[$i] / $se[$i] : 0;
+                }
+            }
+        }
+
         return [
             'a'  => round($b[0], 4),
             'b1' => round($b[1], 4),
             'b2' => round($b[2], 4),
             'b3' => round($b[3], 4),
-            'r2' => round($rSquared, 4)
+            'r2' => round($rSquared, 4),
+            'f_value' => round($fValue, 4),
+            'se_a'  => round($se[0], 4),
+            'se_b1' => round($se[1], 4),
+            'se_b2' => round($se[2], 4),
+            'se_b3' => round($se[3], 4),
+            't_a'  => round($t[0], 4),
+            't_b1' => round($t[1], 4),
+            't_b2' => round($t[2], 4),
+            't_b3' => round($t[3], 4),
         ];
     }
 
@@ -251,5 +291,21 @@ class AnalysisController extends Controller
             }
         }
         return $x;
+    }
+
+    private function invertMatrix($A)
+    {
+        $n = count($A);
+        $inverse = array_fill(0, $n, array_fill(0, $n, 0));
+        for ($col = 0; $col < $n; $col++) {
+            $b = array_fill(0, $n, 0);
+            $b[$col] = 1;
+            $x = $this->solveLinearSystem($A, $b);
+            if ($x === null) return null; // Matriks singular
+            for ($i = 0; $i < $n; $i++) {
+                $inverse[$i][$col] = $x[$i];
+            }
+        }
+        return $inverse;
     }
 }

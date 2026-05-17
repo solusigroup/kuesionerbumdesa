@@ -253,28 +253,58 @@
                         <div class="coeff-item">
                             <div class="coeff-label">Konstanta (a)</div>
                             <div class="coeff-value">{{ $regression['a'] }}</div>
+                            @if(isset($regression['t_a']))
+                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                                SE: {{ $regression['se_a'] }} <br>
+                                t-hitung: {{ $regression['t_a'] }}
+                            </div>
+                            @endif
                         </div>
                         <div class="coeff-item">
                             <div class="coeff-label">Koefisien X₁ (b₁)</div>
                             <div class="coeff-value">{{ $regression['b1'] }}</div>
+                            @if(isset($regression['t_b1']))
+                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                                SE: {{ $regression['se_b1'] }} <br>
+                                t-hitung: {{ $regression['t_b1'] }}
+                            </div>
+                            @endif
                         </div>
                         <div class="coeff-item">
                             <div class="coeff-label">Koefisien X₂ (b₂)</div>
                             <div class="coeff-value">{{ $regression['b2'] }}</div>
+                            @if(isset($regression['t_b2']))
+                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                                SE: {{ $regression['se_b2'] }} <br>
+                                t-hitung: {{ $regression['t_b2'] }}
+                            </div>
+                            @endif
                         </div>
                         <div class="coeff-item">
                             <div class="coeff-label">Koefisien X₃ (b₃)</div>
                             <div class="coeff-value">{{ $regression['b3'] }}</div>
+                            @if(isset($regression['t_b3']))
+                            <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
+                                SE: {{ $regression['se_b3'] }} <br>
+                                t-hitung: {{ $regression['t_b3'] }}
+                            </div>
+                            @endif
                         </div>
                     </div>
 
-                    <div style="margin-top: 32px; display: flex; align-items: center; justify-content: center; gap: 24px;">
-                        <div style="background: rgba(255,255,255,0.15); padding: 12px 24px; border-radius: 12px;">
+                    <div style="margin-top: 32px; display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;">
+                        <div style="background: rgba(255,255,255,0.15); padding: 12px 24px; border-radius: 12px; text-align: center;">
                             <span style="font-size: 0.8rem; color: rgba(255,255,255,0.7); display: block;">R-Squared (R²)</span>
                             <span style="font-size: 1.5rem; font-weight: 700;">{{ $regression['r2'] }}</span>
                         </div>
+                        @if(isset($regression['f_value']))
+                        <div style="background: rgba(255,255,255,0.15); padding: 12px 24px; border-radius: 12px; text-align: center;">
+                            <span style="font-size: 0.8rem; color: rgba(255,255,255,0.7); display: block;">F-hitung</span>
+                            <span style="font-size: 1.5rem; font-weight: 700;">{{ $regression['f_value'] }}</span>
+                        </div>
+                        @endif
                         <div style="max-width: 400px; font-size: 0.85rem; color: rgba(255,255,255,0.8);">
-                            Nilai $R^2$ sebesar {{ $regression['r2'] }} menunjukkan bahwa variabel independen mampu menjelaskan {{ $regression['r2'] * 100 }}% variasi dari variabel dependen.
+                            Nilai $R^2$ sebesar {{ $regression['r2'] }} menunjukkan bahwa variabel independen mampu menjelaskan {{ $regression['r2'] * 100 }}% variasi dari variabel dependen. @if(isset($regression['f_value'])) Nilai F-hitung menguji signifikansi pengaruh secara simultan. @endif
                         </div>
                     </div>
                 </div>
