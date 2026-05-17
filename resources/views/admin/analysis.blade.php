@@ -318,6 +318,67 @@
                     Nilai R-Squared ({{ $regression['r2'] }}) mengindikasikan bahwa ketiga variabel independen secara simultan memengaruhi Kualitas Pelaporan sebesar {{ $regression['r2'] * 100 }}%.
                 </div>
 
+                @if(isset($regression['asumsi']))
+                <div class="header" style="margin-top: 60px;">
+                    <div>
+                        <h2>Uji Asumsi Klasik</h2>
+                        <p style="color: var(--text-light);">Prasyarat regresi OLS (Normalitas, Multikolinearitas, Heteroskedastisitas).</p>
+                    </div>
+                </div>
+
+                <div class="grid-stats" style="grid-template-columns: repeat(3, 1fr);">
+                    <!-- Normalitas -->
+                    <div class="stat-card">
+                        <label>Uji Normalitas (Jarque-Bera)</label>
+                        <div class="value" style="font-size: 1.5rem;">{{ $regression['asumsi']['normalitas']['jb'] }}</div>
+                        <span class="sub" style="display: block; margin-top: 8px;">
+                            <span class="{{ $regression['asumsi']['normalitas']['status'] === 'Normal' ? 'badge-success' : 'badge-danger' }}">
+                                {{ $regression['asumsi']['normalitas']['status'] }}
+                            </span>
+                        </span>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 8px;">
+                            * JB &lt; 5.99 berarti residual terdistribusi normal.
+                        </div>
+                    </div>
+
+                    <!-- Multikolinearitas -->
+                    <div class="stat-card">
+                        <label>Uji Multikolinearitas (VIF)</label>
+                        <div style="font-size: 0.85rem; font-weight: 600;">
+                            VIF X₁: {{ $regression['asumsi']['multikolinearitas']['vif_x1'] }} <br>
+                            VIF X₂: {{ $regression['asumsi']['multikolinearitas']['vif_x2'] }} <br>
+                            VIF X₃: {{ $regression['asumsi']['multikolinearitas']['vif_x3'] }}
+                        </div>
+                        <span class="sub" style="display: block; margin-top: 8px;">
+                            <span class="{{ $regression['asumsi']['multikolinearitas']['status'] === 'Bebas Multikolinearitas' ? 'badge-success' : 'badge-danger' }}">
+                                {{ $regression['asumsi']['multikolinearitas']['status'] }}
+                            </span>
+                        </span>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 8px;">
+                            * VIF &lt; 10 berarti tidak ada multikolinearitas.
+                        </div>
+                    </div>
+
+                    <!-- Heteroskedastisitas -->
+                    <div class="stat-card">
+                        <label>Uji Heteroskedastisitas (Glejser)</label>
+                        <div style="font-size: 0.85rem; font-weight: 600;">
+                            |t| X₁: {{ abs($regression['asumsi']['heteroskedastisitas']['t_x1']) }} <br>
+                            |t| X₂: {{ abs($regression['asumsi']['heteroskedastisitas']['t_x2']) }} <br>
+                            |t| X₃: {{ abs($regression['asumsi']['heteroskedastisitas']['t_x3']) }}
+                        </div>
+                        <span class="sub" style="display: block; margin-top: 8px;">
+                            <span class="{{ $regression['asumsi']['heteroskedastisitas']['status'] === 'Bebas Heteroskedastisitas' ? 'badge-success' : 'badge-danger' }}">
+                                {{ $regression['asumsi']['heteroskedastisitas']['status'] }}
+                            </span>
+                        </span>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 8px;">
+                            * |t| &lt; 2.0 berarti varians residual konstan.
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="header" style="margin-top: 60px;">
                     <div>
                         <h2>Uji Hipotesis Penelitian</h2>

@@ -154,6 +154,79 @@ class AnalysisController extends Controller
     private function calculateMultipleRegression($x1, $x2, $x3, $y)
     {
         $n = count($y);
+        $mainReg = $this->calculateOLS($x1, $x2, $x3, $y);
+        
+        if (!$mainReg || $n <= 4) return $mainReg;
+
+        // --- 1. Uji Normalitas (Jarque-Bera) ---
+        $res = [];
+        for ($i = 0; $i < $n; $i++) {
+            $yPred = $mainReg['a'] + $mainReg['b1']*$x1[$i] + $mainReg['b2']*$x2[$i] + $mainReg['b3']*$x3[$i];
+            $res[] = $y[$i] - $yPred;
+        }
+        $meanRes = array_sum($res) / $n;
+        $m2 = 0; $m3 = 0; $m4 = 0;
+        foreach ($res as $e) {
+            $diff = $e - $meanRes;
+            $m2 += $diff ** 2;
+            $m3 += $diff ** 3;
+            $m4 += $diff ** 4;
+        }
+        $m2 = $m2 / $n; $m3 = $m3 / $n; $m4 = $m4 / $n;
+        
+        $S = $m2 > 0 ? $m3 / ($m2 ** 1.5) : 0;
+        $K = $m2 > 0 ? $m4 / ($m2 ** 2) : 3;
+        $JB = ($n / 6) * ($S**2 + (($K - 3)**2) / 4);
+        
+        // --- 2. Uji Multikolinearitas (VIF & Tolerance) ---
+        $r12 = $this->calculatePearson($x1, $x2);
+        $r13 = $this->calculatePearson($x1, $x3);
+        $r23 = $this->calculatePearson($x2, $x3);
+        $Rx = [
+            [1, $r12, $r13],
+            [$r12, 1, $r23],
+            [$r13, $r23, 1]
+        ];
+        $Rx_inv = $this->invertMatrix($Rx);
+        $vif = [];
+        if ($Rx_inv) {
+            $vif['x1'] = round($Rx_inv[0][0], 3);
+            $vif['x2'] = round($Rx_inv[1][1], 3);
+            $vif['x3'] = round($Rx_inv[2][2], 3);
+        } else {
+            $vif = ['x1' => 0, 'x2' => 0, 'x3' => 0];
+        }
+        
+        // --- 3. Uji Heteroskedastisitas (Uji Glejser) ---
+        $absRes = array_map('abs', $res);
+        $glejserReg = $this->calculateOLS($x1, $x2, $x3, $absRes);
+        
+        $mainReg['asumsi'] = [
+            'normalitas' => [
+                'jb' => round($JB, 3),
+                'status' => $JB < 5.99 ? 'Normal' : 'Tidak Normal' // 5.99 = chi-square df=2, alpha=0.05
+            ],
+            'multikolinearitas' => [
+                'vif_x1' => $vif['x1'],
+                'vif_x2' => $vif['x2'],
+                'vif_x3' => $vif['x3'],
+                'status' => ($vif['x1'] < 10 && $vif['x2'] < 10 && $vif['x3'] < 10) ? 'Bebas Multikolinearitas' : 'Ada Multikolinearitas'
+            ],
+            'heteroskedastisitas' => [
+                't_x1' => $glejserReg ? round($glejserReg['t_b1'], 3) : 0,
+                't_x2' => $glejserReg ? round($glejserReg['t_b2'], 3) : 0,
+                't_x3' => $glejserReg ? round($glejserReg['t_b3'], 3) : 0,
+                'status' => ($glejserReg && abs($glejserReg['t_b1']) < 2.0 && abs($glejserReg['t_b2']) < 2.0 && abs($glejserReg['t_b3']) < 2.0) 
+                            ? 'Bebas Heteroskedastisitas' : 'Ada Heteroskedastisitas'
+            ]
+        ];
+
+        return $mainReg;
+    }
+
+    private function calculateOLS($x1, $x2, $x3, $y)
+    {
+        $n = count($y);
         // We need to solve (X'X)b = X'y
         // X is [1, x1, x2, x3]
         $X = [];
