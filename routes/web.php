@@ -5,6 +5,8 @@ use App\Http\Controllers\KuesionerController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnalysisController;
+use App\Http\Controllers\InterviewController;
+
 
 // Landing Page
 Route::get('/', function () {
@@ -72,3 +74,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 });
 
 Route::get('/analysis', [AnalysisController::class, 'index'])->name('admin.analysis');
+
+Route::get('/interview/create', [InterviewController::class, 'create'])->name('interview.create');
+Route::post('/interview/store', [InterviewController::class, 'store']);
+Route::get('/interview/export', [InterviewController::class, 'exportExcel'])->name('interview.export');
+
+
+
