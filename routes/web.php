@@ -75,9 +75,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
 Route::get('/analysis', [AnalysisController::class, 'index'])->name('admin.analysis');
 
-Route::get('/interview/create', [InterviewController::class, 'create'])->name('interview.create');
-Route::post('/interview/store', [InterviewController::class, 'store']);
-Route::get('/interview/export', [InterviewController::class, 'exportExcel'])->name('interview.export');
+// Protected Interview Log Routes
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/interview/create', [InterviewController::class, 'create'])->name('interview.create');
+    Route::post('/interview/store', [InterviewController::class, 'store']);
+    Route::get('/interview/export', [InterviewController::class, 'exportExcel'])->name('interview.export');
+});
 
 
 

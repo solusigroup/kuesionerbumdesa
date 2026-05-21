@@ -308,11 +308,15 @@
                             <td>{{ $k->jabatan }}</td>
                             <td style="font-weight: 600; color: var(--primary);">{{ $totalScore }} / 100</td>
                             <td>
+                                @if(auth()->user()->role === 'superadmin')
                                 <form action="{{ route('admin.destroy', $k->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" style="background: none; border: none; color: #ef4444; cursor: pointer; font-weight: 600; font-size: 0.85rem; padding: 0;">Hapus</button>
                                 </form>
+                                @else
+                                <span style="color: var(--text-light); font-size: 0.85rem; font-style: italic;">No Akses</span>
+                                @endif
                             </td>
                         </tr>
                         @empty

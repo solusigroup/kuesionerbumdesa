@@ -127,6 +127,10 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
+        if (auth()->user()->role !== 'superadmin') {
+            abort(403, 'Anda tidak memiliki kewenangan untuk menghapus data.');
+        }
+
         $kuesioner = Kuesioner::findOrFail($id);
         $kuesioner->delete();
 
