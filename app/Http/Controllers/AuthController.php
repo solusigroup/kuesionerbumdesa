@@ -31,8 +31,8 @@ class AuthController extends Controller
             ])->withInput();
         }
 
-        // Jika Superadmin, wajib pakai password
-        if ($user->role === 'superadmin' || $request->has('password_mode') && $request->password_mode == '1') {
+        // Jika Superadmin atau Interviewer, wajib pakai password
+        if ($user->role === 'superadmin' || $user->role === 'interviewer' || ($request->has('password_mode') && $request->password_mode == '1')) {
             $credentials = $request->validate([
                 'email' => ['required', 'email'],
                 'password' => ['required'],
@@ -42,7 +42,7 @@ class AuthController extends Controller
                 $request->session()->regenerate();
                 $request->session()->put('password_confirmed_at', now()->timestamp);
                 
-                if (Auth::user()->role === 'superadmin') {
+                if (Auth::user()->role === 'superadmin' || Auth::user()->role === 'interviewer') {
                     return redirect()->route('admin.dashboard');
                 }
                 

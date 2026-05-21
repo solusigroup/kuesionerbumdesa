@@ -146,12 +146,12 @@
                 @enderror
             </div>
             
-            <div id="passwordSection" style="display: none;">
+            <div id="passwordSection" style="display: {{ $errors->has('password') ? 'block' : 'none' }};">
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="password-wrapper">
-                        <input type="password" id="password" name="password" style="{{ $errors->has('password') ? 'border-color: #ef4444;' : '' }}">
-                        <input type="hidden" name="password_mode" id="passwordMode" value="0">
+                        <input type="password" id="password" name="password" style="{{ $errors->has('password') ? 'border-color: #ef4444;' : '' }}" {{ $errors->has('password') ? 'required' : '' }}>
+                        <input type="hidden" name="password_mode" id="passwordMode" value="{{ $errors->has('password') ? '1' : '0' }}">
                         <button type="button" class="toggle-password" onclick="togglePassword('password', this)" tabindex="-1">
                             👁️
                         </button>
@@ -166,7 +166,7 @@
             
             <div style="text-align: center; margin-top: 15px;">
                 <button type="button" onclick="toggleMode()" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 0.85rem;" id="modeToggle">
-                    Masuk dengan Password
+                    {{ $errors->has('password') ? 'Masuk tanpa Password' : 'Masuk dengan Password' }}
                 </button>
             </div>
         </form>
