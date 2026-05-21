@@ -222,10 +222,16 @@
                         <div class="row g-4 mb-4">
                             <div class="col-md-4">
                                 <label class="form-label form-label-custom">Nama BUMDesa</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white border-end-0 border-2" style="border-radius: 12px 0 0 12px;"><i class="bi bi-building text-muted"></i></span>
-                                    <input type="text" name="nama_bumdesa" class="form-control border-start-0" placeholder="Contoh: Tirta Mandiri" style="border-radius: 0 12px 12px 0;" required>
-                                </div>
+                                <select name="nama_bumdesa" id="nama_bumdesa_select" class="form-control" style="border-radius: 12px; border: 2px solid #E2E8F0; padding: 0.75rem 1rem; background-color: #F8FAFC; font-size: 0.95rem; color: #2D3748;" required onchange="toggleCustomBumdesa(this)">
+                                    <option value="">-- Pilih BUMDesa --</option>
+                                    @foreach($bumdesaList as $bumdesa)
+                                        <option value="{{ $bumdesa }}">{{ $bumdesa }}</option>
+                                    @endforeach
+                                    <option value="__lainnya__">✏️ Lainnya (ketik manual)</option>
+                                </select>
+                                <input type="text" name="nama_bumdesa_custom" id="nama_bumdesa_custom"
+                                    class="form-control mt-2" placeholder="Ketik nama BUMDesa..."
+                                    style="display:none; border-radius: 12px; border: 2px solid #4f46e5; padding: 0.75rem 1rem; font-size: 0.95rem;">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label form-label-custom">Nama Narasumber</label>
@@ -314,5 +320,24 @@
 </div>
 <!-- Bootstrap JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Tampilkan/sembunyikan input manual saat pilih "Lainnya"
+    function toggleCustomBumdesa(select) {
+        const customInput = document.getElementById('nama_bumdesa_custom');
+        if (select.value === '__lainnya__') {
+            customInput.style.display = 'block';
+            customInput.required = true;
+            select.required = false;
+            select.name = '_nama_bumdesa_select'; // non-aktifkan select
+            customInput.name = 'nama_bumdesa';    // aktifkan custom input
+        } else {
+            customInput.style.display = 'none';
+            customInput.required = false;
+            select.required = true;
+            select.name = 'nama_bumdesa';         // kembalikan select
+            customInput.name = 'nama_bumdesa_custom';
+        }
+    }
+</script>
 </body>
 </html>

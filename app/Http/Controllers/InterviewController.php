@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\InterviewLog;
+use App\Models\Kuesioner;
 
 class InterviewController extends Controller
 {
     public function create()
     {
-        return view('interview.create');
+        // Ambil daftar nama BUMDesa unik dari data responden, diurutkan A-Z
+        $bumdesaList = Kuesioner::select('nama_bumdesa')
+            ->distinct()
+            ->orderBy('nama_bumdesa')
+            ->pluck('nama_bumdesa');
+
+        return view('interview.create', compact('bumdesaList'));
     }
 
     public function store(Request $request)
