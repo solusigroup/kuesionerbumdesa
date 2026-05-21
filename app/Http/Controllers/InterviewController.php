@@ -8,6 +8,24 @@ use App\Models\Kuesioner;
 
 class InterviewController extends Controller
 {
+    public function index(Request $request)
+    {
+        $query = InterviewLog::latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nama_bumdesa', 'like', "%{$search}%")
+                  ->orWhere('nama_narasumber', 'like', "%{$search}%")
+                  ->orWhere('jabatan', 'like', "%{$search}%");
+            });
+        }
+
+        $logs = $query->get();
+
+        return view('interview.index', compact('logs'));
+    }
+
     public function create()
     {
         // Ambil daftar nama BUMDesa unik dari data responden, diurutkan A-Z

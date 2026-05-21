@@ -218,6 +218,7 @@
             <a href="{{ route('admin.analysis') }}">Analisis</a>
             <a href="{{ route('admin.whatsapp') }}">WhatsApp</a>
             <a href="{{ route('admin.lottery') }}">Pengundian</a>
+            <a href="{{ route('admin.interviews') }}">Hasil Wawancara</a>
             <a href="https://kuesioner.simpleakunting.shop/interview/create" style="background: #4f46e5; color: white; padding: 6px 12px; border-radius: 6px; font-weight: 600; text-decoration: none;">WAWANCARA</a>
             <span>{{ auth()->user()->name }} ({{ auth()->user()->role === 'superadmin' ? 'Superadmin' : 'Interviewer' }})</span>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
@@ -231,7 +232,10 @@
                 <h1>Data Hasil Kuesioner</h1>
                 <p style="color: var(--text-light); margin-top: 4px;">Monitor dan ekspor seluruh hasil isian dari responden.</p>
             </div>
-            <div style="display: flex; gap: 12px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <a href="{{ route('admin.interviews') }}" class="btn btn-primary" style="background: #ffffff; color: #1f2937; border: 1px solid #d1d5db;">
+                    📋 Hasil Wawancara
+                </a>
                 <a href="{{ route('admin.analysis') }}" class="btn btn-primary" style="background: #ffffff; color: var(--primary); border: 1px solid var(--primary);">
                     📈 Lihat Analisis
                 </a>
