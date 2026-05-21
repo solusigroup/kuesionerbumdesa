@@ -358,7 +358,12 @@
         <div class="nav-links">
             <a href="#panduan">Panduan</a>
             @auth
-                <a href="{{ route('kuesioner.index') }}">Dashboard</a>
+                @if(auth()->user()->role === 'superadmin' || auth()->user()->role === 'interviewer')
+                    <a href="{{ route('admin.dashboard') }}">Admin Panel</a>
+                    <a href="https://kuesioner.simpleakunting.shop/interview/create" style="background: #4f46e5; color: white; padding: 6px 12px; border-radius: 6px; font-weight: 600; text-decoration: none;">WAWANCARA</a>
+                @else
+                    <a href="{{ route('kuesioner.index') }}">Dashboard</a>
+                @endif
                 <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
             @else

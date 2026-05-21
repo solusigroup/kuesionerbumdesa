@@ -275,7 +275,8 @@
             <a href="{{ route('admin.analysis') }}">Analisis</a>
             <a href="{{ route('admin.whatsapp') }}" style="color: var(--primary); font-weight: 700;">WhatsApp</a>
             <a href="{{ route('admin.lottery') }}">Pengundian</a>
-            <span>{{ auth()->user()->name }}</span>
+            <a href="https://kuesioner.simpleakunting.shop/interview/create" style="background: #4f46e5; color: white; padding: 6px 12px; border-radius: 6px; font-weight: 600; text-decoration: none;">WAWANCARA</a>
+            <span>{{ auth()->user()->name }} ({{ auth()->user()->role === 'superadmin' ? 'Superadmin' : 'Interviewer' }})</span>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
         </div>

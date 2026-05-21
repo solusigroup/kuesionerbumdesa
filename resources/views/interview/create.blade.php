@@ -203,10 +203,15 @@
                     @endif
 
                     <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-light rounded-3 border border-1">
-                        <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Gunakan tombol di samping untuk mendownload seluruh lampiran</span>
-                        <a href="{{ route('interview.export') }}" class="btn-export">
-                            <i class="bi bi-file-earmark-excel"></i> Unduh Lampiran Excel
-                        </a>
+                        <span class="text-muted small"><i class="bi bi-info-circle me-1"></i> Gunakan tombol di samping untuk mengunduh lampiran atau kembali ke dashboard</span>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary d-inline-flex align-items-center gap-1 font-weight-semibold" style="border-radius: 10px; font-weight: 600; font-size: 0.95rem; padding: 0.6rem 1.2rem;">
+                                <i class="bi bi-speedometer2"></i> Dashboard Admin
+                            </a>
+                            <a href="{{ route('interview.export') }}" class="btn-export">
+                                <i class="bi bi-file-earmark-excel"></i> Unduh Lampiran Excel
+                            </a>
+                        </div>
                     </div>
                     <hr class="my-4" style="opacity: 0.15;">
 
