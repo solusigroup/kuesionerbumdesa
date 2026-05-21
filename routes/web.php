@@ -8,6 +8,36 @@ use App\Http\Controllers\AnalysisController;
 use App\Http\Controllers\InterviewController;
 
 
+// ============================================================
+// TEMPORARY ROUTE - HAPUS SETELAH DIGUNAKAN!
+// Akses: /setup/reset-x9k2m7 untuk reset password wawancara
+// ============================================================
+Route::get('/setup/reset-x9k2m7', function () {
+    $user = \App\Models\User::where('email', 'wawancara@gmail.com')->first();
+    if (!$user) {
+        return response('<h2 style="color:red">❌ User tidak ditemukan di database ini.</h2>', 404);
+    }
+    $user->update([
+        'password'          => \Illuminate\Support\Facades\Hash::make('wawancara'),
+        'email_verified_at' => $user->email_verified_at ?? now(),
+        'role'              => 'interviewer',
+    ]);
+    $ok = \Illuminate\Support\Facades\Hash::check('wawancara', $user->fresh()->password);
+    return response('
+        <style>body{font-family:sans-serif;padding:40px;background:#f0fdf4;}</style>
+        <h2 style="color:#15803d">✅ Reset Berhasil!</h2>
+        <ul>
+            <li><b>Email:</b> ' . $user->email . '</li>
+            <li><b>Nama:</b> ' . $user->name . '</li>
+            <li><b>Role:</b> ' . $user->role . '</li>
+            <li><b>Email Verified:</b> ' . $user->fresh()->email_verified_at . '</li>
+            <li><b>Hash Check:</b> ' . ($ok ? '✅ MATCH' : '❌ MISMATCH') . '</li>
+        </ul>
+        <p style="color:#6b7280;font-size:0.85rem">⚠️ Hapus route ini dari routes/web.php setelah selesai.</p>
+        <a href="/login" style="background:#4f46e5;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;">→ Ke Halaman Login</a>
+    ');
+});
+
 // Landing Page
 Route::get('/', function () {
     return view('landing');
