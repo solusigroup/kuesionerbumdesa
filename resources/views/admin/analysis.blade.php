@@ -66,6 +66,33 @@
         .coeff-label { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.7); text-transform: uppercase; margin-bottom: 4px; }
         .coeff-value { font-size: 1.25rem; font-weight: 700; }
         .narration-box { background: #e0e7ff; border-left: 4px solid var(--primary); padding: 16px 24px; margin-top: 20px; border-radius: 0 12px 12px 0; font-size: 0.95rem; color: var(--text); line-height: 1.6; }
+        .chart-flex-container {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+        .chart-wrapper {
+            flex: 1.2;
+            min-width: 250px;
+            height: 300px;
+            position: relative;
+        }
+        .table-wrapper {
+            flex: 1;
+            min-width: 250px;
+        }
+        .grid-asumsi {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 1024px) {
+            .grid-asumsi {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -142,30 +169,216 @@
             </div>
 
             <div class="grid-charts">
-                <div class="chart-card">
+                <div class="chart-card" style="grid-column: span 2;">
                     <h3>Sebaran Responden per Kabupaten</h3>
-                    <div style="height: 350px;"><canvas id="kabupatenChart"></canvas></div>
+                    <div class="chart-flex-container">
+                        <div class="chart-wrapper">
+                            <canvas id="kabupatenChart"></canvas>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="table-stats">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding-left: 16px;">Kabupaten/Kota</th>
+                                        <th>Frekuensi (N)</th>
+                                        <th>Persentase (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $sumKab = $byKabupaten->sum(); @endphp
+                                    @foreach($byKabupaten as $key => $val)
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 16px;">{{ $key }}</td>
+                                            <td style="font-weight: 600;">{{ $val }}</td>
+                                            <td>{{ $sumKab > 0 ? round(($val / $sumKab) * 100, 1) : 0 }}%</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style="font-weight: bold; background: #f8fafc;">
+                                        <td style="text-align: left; padding-left: 16px;">Total</td>
+                                        <td>{{ $sumKab }}</td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="chart-card">
+
+                <div class="chart-card" style="grid-column: span 2;">
                     <h3>Sebaran Responden per Jabatan</h3>
-                    <div style="height: 350px;"><canvas id="jabatanChart"></canvas></div>
+                    <div class="chart-flex-container">
+                        <div class="chart-wrapper">
+                            <canvas id="jabatanChart"></canvas>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="table-stats">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding-left: 16px;">Jabatan</th>
+                                        <th>Frekuensi (N)</th>
+                                        <th>Persentase (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $sumJab = $byJabatan->sum(); @endphp
+                                    @foreach($byJabatan as $key => $val)
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 16px;">{{ $key }}</td>
+                                            <td style="font-weight: 600;">{{ $val }}</td>
+                                            <td>{{ $sumJab > 0 ? round(($val / $sumJab) * 100, 1) : 0 }}%</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style="font-weight: bold; background: #f8fafc;">
+                                        <td style="text-align: left; padding-left: 16px;">Total</td>
+                                        <td>{{ $sumJab }}</td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="chart-card">
+
+                <div class="chart-card" style="grid-column: span 2;">
                     <h3>Sebaran Responden per Pendidikan</h3>
-                    <div style="height: 350px;"><canvas id="pendidikanChart"></canvas></div>
+                    <div class="chart-flex-container">
+                        <div class="chart-wrapper">
+                            <canvas id="pendidikanChart"></canvas>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="table-stats">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding-left: 16px;">Pendidikan Terakhir</th>
+                                        <th>Frekuensi (N)</th>
+                                        <th>Persentase (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $sumEdu = $byPendidikan->sum(); @endphp
+                                    @foreach($byPendidikan as $key => $val)
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 16px;">{{ $key }}</td>
+                                            <td style="font-weight: 600;">{{ $val }}</td>
+                                            <td>{{ $sumEdu > 0 ? round(($val / $sumEdu) * 100, 1) : 0 }}%</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style="font-weight: bold; background: #f8fafc;">
+                                        <td style="text-align: left; padding-left: 16px;">Total</td>
+                                        <td>{{ $sumEdu }}</td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="chart-card">
+
+                <div class="chart-card" style="grid-column: span 2;">
                     <h3>Pernah Mengikuti Pelatihan</h3>
-                    <div style="height: 350px;"><canvas id="pelatihanChart"></canvas></div>
+                    <div class="chart-flex-container">
+                        <div class="chart-wrapper">
+                            <canvas id="pelatihanChart"></canvas>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="table-stats">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding-left: 16px;">Jawaban</th>
+                                        <th>Frekuensi (N)</th>
+                                        <th>Persentase (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $sumPel = $byPelatihan->sum(); @endphp
+                                    @foreach($byPelatihan as $key => $val)
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 16px;">{{ $key }}</td>
+                                            <td style="font-weight: 600;">{{ $val }}</td>
+                                            <td>{{ $sumPel > 0 ? round(($val / $sumPel) * 100, 1) : 0 }}%</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style="font-weight: bold; background: #f8fafc;">
+                                        <td style="text-align: left; padding-left: 16px;">Total</td>
+                                        <td>{{ $sumPel }}</td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="chart-card">
+
+                <div class="chart-card" style="grid-column: span 2;">
                     <h3>Menggunakan Aplikasi</h3>
-                    <div style="height: 350px;"><canvas id="aplikasiChart"></canvas></div>
+                    <div class="chart-flex-container">
+                        <div class="chart-wrapper">
+                            <canvas id="aplikasiChart"></canvas>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="table-stats">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding-left: 16px;">Jawaban</th>
+                                        <th>Frekuensi (N)</th>
+                                        <th>Persentase (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $sumApp = $byAplikasi->sum(); @endphp
+                                    @foreach($byAplikasi as $key => $val)
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 16px;">{{ $key }}</td>
+                                            <td style="font-weight: 600;">{{ $val }}</td>
+                                            <td>{{ $sumApp > 0 ? round(($val / $sumApp) * 100, 1) : 0 }}%</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style="font-weight: bold; background: #f8fafc;">
+                                        <td style="text-align: left; padding-left: 16px;">Total</td>
+                                        <td>{{ $sumApp }}</td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="chart-card">
+
+                <div class="chart-card" style="grid-column: span 2;">
                     <h3>Frekuensi Pelatihan</h3>
-                    <div style="height: 350px;"><canvas id="frekuensiChart"></canvas></div>
+                    <div class="chart-flex-container">
+                        <div class="chart-wrapper">
+                            <canvas id="frekuensiChart"></canvas>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="table-stats">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: left; padding-left: 16px;">Frekuensi Pelatihan</th>
+                                        <th>Frekuensi (N)</th>
+                                        <th>Persentase (%)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php $sumFreq = $byFrekuensi->sum(); @endphp
+                                    @foreach($byFrekuensi as $key => $val)
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 16px;">{{ $key }}</td>
+                                            <td style="font-weight: 600;">{{ $val }}</td>
+                                            <td>{{ $sumFreq > 0 ? round(($val / $sumFreq) * 100, 1) : 0 }}%</td>
+                                        </tr>
+                                    @endforeach
+                                    <tr style="font-weight: bold; background: #f8fafc;">
+                                        <td style="text-align: left; padding-left: 16px;">Total</td>
+                                        <td>{{ $sumFreq }}</td>
+                                        <td>100%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
                 <div class="chart-card" style="grid-column: span 1;">
                     <h3>Radar Perbandingan Variabel</h3>
                     <div style="height: 350px;"><canvas id="radarChart"></canvas></div>
@@ -190,7 +403,72 @@
                     'x3' => ['label' => 'Kelemahan Tata Kelola (X3)'],
                     'y'  => ['label' => 'Kualitas Pelaporan (Y)']
                 ];
+
+                $validitySummary = [];
+                foreach(['x1', 'x2', 'x3', 'y'] as $key) {
+                    $totalItems = count($quality['validity'][$key]);
+                    $validItems = 0;
+                    foreach($quality['validity'][$key] as $r) {
+                        if ($r >= 0.3) {
+                            $validItems++;
+                        }
+                    }
+                    $validitySummary[$key] = [
+                        'total' => $totalItems,
+                        'valid' => $validItems,
+                        'invalid' => $totalItems - $validItems
+                    ];
+                }
             @endphp
+
+            <div class="chart-card" style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 20px;">Tabel Ringkasan Uji Kualitas Instrumen</h3>
+                <div style="overflow-x: auto;">
+                    <table class="table-stats" style="margin-top: 0;">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th style="text-align: left; padding-left: 16px;">Variabel Penelitian</th>
+                                <th>Jumlah Butir</th>
+                                <th>Cronbach's Alpha</th>
+                                <th>Batas Reliabilitas</th>
+                                <th>Status Reliabilitas</th>
+                                <th>Butir Valid</th>
+                                <th>Butir Tidak Valid</th>
+                                <th>Kesimpulan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php $no = 1; @endphp
+                            @foreach($vars as $key => $v)
+                                <tr>
+                                    <td>{{ $no++ }}</td>
+                                    <td style="text-align: left; padding-left: 16px; font-weight: 600;">{{ $v['label'] }}</td>
+                                    <td>{{ $validitySummary[$key]['total'] }}</td>
+                                    <td style="font-weight: 600; color: var(--primary);">{{ $quality['reliability'][$key] }}</td>
+                                    <td>&ge; 0.60</td>
+                                    <td>
+                                        <span class="{{ $quality['reliability'][$key] >= 0.6 ? 'badge-success' : 'badge-danger' }}">
+                                            {{ $quality['reliability'][$key] >= 0.6 ? 'Reliabel' : 'Tidak Reliabel' }}
+                                        </span>
+                                    </td>
+                                    <td style="font-weight: 600; color: var(--secondary);">{{ $validitySummary[$key]['valid'] }}</td>
+                                    <td style="font-weight: 600; color: {{ $validitySummary[$key]['invalid'] > 0 ? 'var(--danger)' : 'var(--text-light)' }}">{{ $validitySummary[$key]['invalid'] }}</td>
+                                    <td>
+                                        @if($validitySummary[$key]['invalid'] === 0 && $quality['reliability'][$key] >= 0.6)
+                                            <span class="badge-success">Sangat Layak</span>
+                                        @elseif($validitySummary[$key]['valid'] > 0 && $quality['reliability'][$key] >= 0.6)
+                                            <span class="badge-success">Layak dengan Revisi</span>
+                                        @else
+                                            <span class="badge-danger">Tidak Layak</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <div class="grid-charts">
                 @foreach($quality['validity'] as $key => $items)
@@ -331,54 +609,114 @@
                     </div>
                 </div>
 
-                <div class="grid-stats" style="grid-template-columns: repeat(3, 1fr);">
-                    <!-- Normalitas -->
-                    <div class="stat-card">
-                        <label>Uji Normalitas (Jarque-Bera)</label>
-                        <div class="value" style="font-size: 1.5rem;">{{ $regression['asumsi']['normalitas']['jb'] }}</div>
-                        <span class="sub" style="display: block; margin-top: 8px;">
-                            <span class="{{ $regression['asumsi']['normalitas']['status'] === 'Normal' ? 'badge-success' : 'badge-danger' }}">
-                                {{ $regression['asumsi']['normalitas']['status'] }}
-                            </span>
-                        </span>
-                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 8px;">
-                            * JB &lt; 5.99 berarti residual terdistribusi normal.
+                <div class="grid-asumsi">
+                    <!-- Table Uji Normalitas -->
+                    <div class="chart-card" style="padding: 24px;">
+                        <h3 style="margin-bottom: 16px; font-size: 1rem;">Uji Normalitas</h3>
+                        <table class="table-stats">
+                            <thead>
+                                <tr>
+                                    <th>Metode</th>
+                                    <th>Statistik</th>
+                                    <th>Kriteria</th>
+                                    <th>Kesimpulan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Jarque-Bera</td>
+                                    <td style="font-weight: 600;">{{ $regression['asumsi']['normalitas']['jb'] }}</td>
+                                    <td>&lt; 5.99</td>
+                                    <td>
+                                        <span class="{{ $regression['asumsi']['normalitas']['status'] === 'Normal' ? 'badge-success' : 'badge-danger' }}">
+                                            {{ $regression['asumsi']['normalitas']['status'] }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 12px; line-height: 1.4;">
+                            * Nilai JB &lt; 5.99 mengindikasikan bahwa residual terdistribusi secara normal.
                         </div>
                     </div>
 
-                    <!-- Multikolinearitas -->
-                    <div class="stat-card">
-                        <label>Uji Multikolinearitas (VIF)</label>
-                        <div style="font-size: 0.85rem; font-weight: 600;">
-                            VIF X₁: {{ $regression['asumsi']['multikolinearitas']['vif_x1'] }} <br>
-                            VIF X₂: {{ $regression['asumsi']['multikolinearitas']['vif_x2'] }} <br>
-                            VIF X₃: {{ $regression['asumsi']['multikolinearitas']['vif_x3'] }}
-                        </div>
-                        <span class="sub" style="display: block; margin-top: 8px;">
-                            <span class="{{ $regression['asumsi']['multikolinearitas']['status'] === 'Bebas Multikolinearitas' ? 'badge-success' : 'badge-danger' }}">
-                                {{ $regression['asumsi']['multikolinearitas']['status'] }}
-                            </span>
-                        </span>
-                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 8px;">
-                            * VIF &lt; 10 berarti tidak ada multikolinearitas.
+                    <!-- Table Uji Multikolinearitas -->
+                    <div class="chart-card" style="padding: 24px;">
+                        <h3 style="margin-bottom: 16px; font-size: 1rem;">Uji Multikolinearitas</h3>
+                        <table class="table-stats">
+                            <thead>
+                                <tr>
+                                    <th>Variabel</th>
+                                    <th>VIF</th>
+                                    <th>Kriteria</th>
+                                    <th>Kesimpulan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>X1</td>
+                                    <td style="font-weight: 600;">{{ $regression['asumsi']['multikolinearitas']['vif_x1'] }}</td>
+                                    <td>&lt; 10</td>
+                                    <td rowspan="3" style="vertical-align: middle;">
+                                        <span class="{{ $regression['asumsi']['multikolinearitas']['status'] === 'Bebas Multikolinearitas' ? 'badge-success' : 'badge-danger' }}">
+                                            {{ $regression['asumsi']['multikolinearitas']['status'] === 'Bebas Multikolinearitas' ? 'Bebas' : 'Gejala' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>X2</td>
+                                    <td style="font-weight: 600;">{{ $regression['asumsi']['multikolinearitas']['vif_x2'] }}</td>
+                                    <td>&lt; 10</td>
+                                </tr>
+                                <tr>
+                                    <td>X3</td>
+                                    <td style="font-weight: 600;">{{ $regression['asumsi']['multikolinearitas']['vif_x3'] }}</td>
+                                    <td>&lt; 10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 12px; line-height: 1.4;">
+                            * Nilai VIF &lt; 10 menunjukkan tidak adanya gejala multikolinearitas antar variabel.
                         </div>
                     </div>
 
-                    <!-- Heteroskedastisitas -->
-                    <div class="stat-card">
-                        <label>Uji Heteroskedastisitas (Glejser)</label>
-                        <div style="font-size: 0.85rem; font-weight: 600;">
-                            |t| X₁: {{ abs($regression['asumsi']['heteroskedastisitas']['t_x1']) }} <br>
-                            |t| X₂: {{ abs($regression['asumsi']['heteroskedastisitas']['t_x2']) }} <br>
-                            |t| X₃: {{ abs($regression['asumsi']['heteroskedastisitas']['t_x3']) }}
-                        </div>
-                        <span class="sub" style="display: block; margin-top: 8px;">
-                            <span class="{{ $regression['asumsi']['heteroskedastisitas']['status'] === 'Bebas Heteroskedastisitas' ? 'badge-success' : 'badge-danger' }}">
-                                {{ $regression['asumsi']['heteroskedastisitas']['status'] }}
-                            </span>
-                        </span>
-                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 8px;">
-                            * |t| &lt; 2.0 berarti varians residual konstan.
+                    <!-- Table Uji Heteroskedastisitas -->
+                    <div class="chart-card" style="padding: 24px;">
+                        <h3 style="margin-bottom: 16px; font-size: 1rem;">Uji Heteroskedastisitas</h3>
+                        <table class="table-stats">
+                            <thead>
+                                <tr>
+                                    <th>Variabel</th>
+                                    <th>|t-hit|</th>
+                                    <th>Kriteria</th>
+                                    <th>Kesimpulan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>X1</td>
+                                    <td style="font-weight: 600;">{{ abs($regression['asumsi']['heteroskedastisitas']['t_x1']) }}</td>
+                                    <td>&lt; 2.0</td>
+                                    <td rowspan="3" style="vertical-align: middle;">
+                                        <span class="{{ $regression['asumsi']['heteroskedastisitas']['status'] === 'Bebas Heteroskedastisitas' ? 'badge-success' : 'badge-danger' }}">
+                                            {{ $regression['asumsi']['heteroskedastisitas']['status'] === 'Bebas Heteroskedastisitas' ? 'Bebas' : 'Gejala' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>X2</td>
+                                    <td style="font-weight: 600;">{{ abs($regression['asumsi']['heteroskedastisitas']['t_x2']) }}</td>
+                                    <td>&lt; 2.0</td>
+                                </tr>
+                                <tr>
+                                    <td>X3</td>
+                                    <td style="font-weight: 600;">{{ abs($regression['asumsi']['heteroskedastisitas']['t_x3']) }}</td>
+                                    <td>&lt; 2.0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 12px; line-height: 1.4;">
+                            * Uji Glejser. Nilai mutlak t-hitung &lt; 2.0 (t-tabel) menunjukkan bebas heteroskedastisitas.
                         </div>
                     </div>
                 </div>
