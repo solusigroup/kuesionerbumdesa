@@ -24,6 +24,12 @@ fi
 echo "🗄️ Running migrations..."
 php artisan migrate --force
 
+# Import database dump to sync respondents (local database is the source of truth)
+# Comment this out in the future if you want to prevent overwriting new production data
+echo "🗄️ Syncing respondents database..."
+php artisan db:import-dump --force
+
+
 # Clear and Cache Config/Routes/Compiler
 echo "⚡ Optimizing application..."
 php artisan optimize
