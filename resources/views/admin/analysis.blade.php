@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analisis Kuesioner - Admin Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- MathJax for rendering LaTeX formulas beautifully -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -389,7 +400,244 @@
                 </div>
             </div>
 
+            <!-- Tabel Statistik Deskriptif (Saran Perbaikan 3) -->
+            <div class="chart-card" style="margin-top: 40px; margin-bottom: 32px;">
+                <h3 style="margin-bottom: 20px; border-left: 4px solid var(--primary); padding-left: 12px;">Tabel 1: Statistik Deskriptif Variabel & Indikator Penelitian</h3>
+                <p style="color: var(--text-light); font-size: 0.85rem; margin-top: -12px; margin-bottom: 20px;">Menampilkan jumlah sampel (N), nilai minimum (Min), nilai maksimum (Max), rata-rata (Mean), dan standar deviasi (Std. Deviasi) untuk setiap variabel dan butir pernyataan.</p>
+                <div style="overflow-x: auto;">
+                    <table class="table-stats" style="margin-top: 0; text-align: left;">
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th style="text-align: left; padding-left: 16px; width: 45%;">Variabel / Indikator Penelitian</th>
+                                <th style="text-align: center;">N</th>
+                                <th style="text-align: center;">Min</th>
+                                <th style="text-align: center;">Max</th>
+                                <th style="text-align: center;">Mean</th>
+                                <th style="text-align: center;">Standar Deviasi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- X1 -->
+                            <tr style="background: #e2e8f0; font-weight: 700; border-bottom: 2px solid var(--border);">
+                                <td style="text-align: left; padding-left: 16px;">Kapasitas Manajerial (X1) - Composite</td>
+                                <td style="text-align: center;">{{ $descriptive['variables']['x1']['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x1']['min'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x1']['max'], 2) }}</td>
+                                <td style="text-align: center; color: var(--primary);">{{ number_format($descriptive['variables']['x1']['mean'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x1']['std_dev'], 2) }}</td>
+                            </tr>
+                            @foreach($descriptive['items']['x1'] as $item => $val)
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: left; padding-left: 32px; color: var(--text-light);">Butir {{ substr($item, -1) }}: X1.{{ substr($item, -1) }}</td>
+                                <td style="text-align: center;">{{ $val['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($val['min'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['max'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['mean'], 2) }}</td>
+                                <td style="text-align: center; color: var(--text-light);">{{ number_format($val['std_dev'], 2) }}</td>
+                            </tr>
+                            @endforeach
+
+                            <!-- X2 -->
+                            <tr style="background: #e2e8f0; font-weight: 700; border-bottom: 2px solid var(--border); margin-top: 10px;">
+                                <td style="text-align: left; padding-left: 16px;">Tekanan Budaya Relasional (X2) - Composite</td>
+                                <td style="text-align: center;">{{ $descriptive['variables']['x2']['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x2']['min'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x2']['max'], 2) }}</td>
+                                <td style="text-align: center; color: var(--danger);">{{ number_format($descriptive['variables']['x2']['mean'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x2']['std_dev'], 2) }}</td>
+                            </tr>
+                            @foreach($descriptive['items']['x2'] as $item => $val)
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: left; padding-left: 32px; color: var(--text-light);">Butir {{ substr($item, -1) }}: X2.{{ substr($item, -1) }}</td>
+                                <td style="text-align: center;">{{ $val['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($val['min'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['max'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['mean'], 2) }}</td>
+                                <td style="text-align: center; color: var(--text-light);">{{ number_format($val['std_dev'], 2) }}</td>
+                            </tr>
+                            @endforeach
+
+                            <!-- X3 -->
+                            <tr style="background: #e2e8f0; font-weight: 700; border-bottom: 2px solid var(--border);">
+                                <td style="text-align: left; padding-left: 16px;">Kelemahan Tata Kelola Keuangan (X3) - Composite</td>
+                                <td style="text-align: center;">{{ $descriptive['variables']['x3']['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x3']['min'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x3']['max'], 2) }}</td>
+                                <td style="text-align: center; color: var(--danger);">{{ number_format($descriptive['variables']['x3']['mean'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['x3']['std_dev'], 2) }}</td>
+                            </tr>
+                            @foreach($descriptive['items']['x3'] as $item => $val)
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: left; padding-left: 32px; color: var(--text-light);">Butir {{ substr($item, -1) }}: X3.{{ substr($item, -1) }}</td>
+                                <td style="text-align: center;">{{ $val['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($val['min'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['max'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['mean'], 2) }}</td>
+                                <td style="text-align: center; color: var(--text-light);">{{ number_format($val['std_dev'], 2) }}</td>
+                            </tr>
+                            @endforeach
+
+                            <!-- Y -->
+                            <tr style="background: #e2e8f0; font-weight: 700; border-bottom: 2px solid var(--border);">
+                                <td style="text-align: left; padding-left: 16px;">Kualitas Implementasi Pelaporan (Y) - Composite</td>
+                                <td style="text-align: center;">{{ $descriptive['variables']['y']['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['y']['min'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['y']['max'], 2) }}</td>
+                                <td style="text-align: center; color: var(--secondary);">{{ number_format($descriptive['variables']['y']['mean'], 2) }}</td>
+                                <td style="text-align: center;">{{ number_format($descriptive['variables']['y']['std_dev'], 2) }}</td>
+                            </tr>
+                            @foreach($descriptive['items']['y'] as $item => $val)
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: left; padding-left: 32px; color: var(--text-light);">Butir {{ substr($item, -1) }}: Y.{{ substr($item, -1) }}</td>
+                                <td style="text-align: center;">{{ $val['n'] }}</td>
+                                <td style="text-align: center;">{{ number_format($val['min'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['max'], 0) }}</td>
+                                <td style="text-align: center;">{{ number_format($val['mean'], 2) }}</td>
+                                <td style="text-align: center; color: var(--text-light);">{{ number_format($val['std_dev'], 2) }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabel Definisi Operasional & Teks Kuesioner (Saran Perbaikan 3) -->
+            <div class="chart-card" style="margin-bottom: 32px;">
+                <h3 style="margin-bottom: 20px; border-left: 4px solid var(--primary); padding-left: 12px;">Tabel 2: Definisi Operasional & Butir Instrumen Penelitian</h3>
+                <p style="color: var(--text-light); font-size: 0.85rem; margin-top: -12px; margin-bottom: 20px;">Melampirkan rincian definisi konstruk variabel penelitian beserta contoh pertanyaan/pernyataan kuesioner yang disajikan kepada responden.</p>
+                <div style="overflow-x: auto;">
+                    <table class="table-stats" style="margin-top: 0; text-align: left;">
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th style="text-align: left; padding-left: 16px; width: 20%;">Variabel</th>
+                                <th style="text-align: left; width: 25%;">Definisi Operasional</th>
+                                <th style="text-align: center; width: 8%;">Kode</th>
+                                <th style="text-align: left; padding-right: 16px; width: 47%;">Butir Pernyataan / Item Kuesioner</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- X1 -->
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td rowspan="5" style="text-align: left; padding-left: 16px; font-weight: 700; vertical-align: top; background: #fafafa;">
+                                    Kapasitas Manajerial (X1)
+                                </td>
+                                <td rowspan="5" style="text-align: justify; vertical-align: top; line-height: 1.5; font-size: 0.85rem; padding-right: 12px; background: #fafafa;">
+                                    Kemampuan teknis, pemahaman regulasi, serta keahlian pengelola BUMDesa dalam menyelenggarakan administrasi dan analisis unit usaha secara mandiri.
+                                </td>
+                                <td style="text-align: center; font-weight: 600;">X1.1</td>
+                                <td style="font-size: 0.85rem;">Saya memahami dasar-dasar pencatatan transaksi keuangan BUMDesa.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X1.2</td>
+                                <td style="font-size: 0.85rem;">Saya mampu menyusun laporan keuangan secara mandiri.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X1.3</td>
+                                <td style="font-size: 0.85rem;">Saya memahami regulasi dalam pengelolaan BUMDesa.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X1.4</td>
+                                <td style="font-size: 0.85rem;">Saya mampu melakukan analisis kelayakan usaha.</td>
+                            </tr>
+                            <tr style="border-bottom: 2px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X1.5</td>
+                                <td style="font-size: 0.85rem;">Saya rutin melakukan evaluasi kinerja unit usaha.</td>
+                            </tr>
+
+                            <!-- X2 -->
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td rowspan="5" style="text-align: left; padding-left: 16px; font-weight: 700; vertical-align: top; background: #fafafa;">
+                                    Tekanan Budaya Relasional (X2)
+                                </td>
+                                <td rowspan="5" style="text-align: justify; vertical-align: top; line-height: 1.5; font-size: 0.85rem; padding-right: 12px; background: #fafafa;">
+                                    Hambatan sosial kemasyarakatan di tingkat desa berupa konflik kepentingan, kedekatan personal kekerabatan perangkat desa, dominasi pengambilan keputusan, dan beban moral hubungan patronase.
+                                </td>
+                                <td style="text-align: center; font-weight: 600;">X2.1</td>
+                                <td style="font-size: 0.85rem;">Sering terjadi konflik kepentingan antara pengelola dan perangkat desa.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X2.2</td>
+                                <td style="font-size: 0.85rem;">Adanya tekanan dari keluarga/kerabat perangkat desa dalam rekrutmen pengelola.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X2.3</td>
+                                <td style="font-size: 0.85rem;">Sulit untuk bersikap profesional karena adanya faktor kedekatan personal.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X2.4</td>
+                                <td style="font-size: 0.85rem;">Pengambilan keputusan seringkali didominasi oleh salah satu pihak yang berpengaruh.</td>
+                            </tr>
+                            <tr style="border-bottom: 2px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X2.5</td>
+                                <td style="font-size: 0.85rem;">Adanya beban moral untuk memprioritaskan kepentingan kelompok tertentu di atas kepentingan BUMDesa.</td>
+                            </tr>
+
+                            <!-- X3 -->
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td rowspan="5" style="text-align: left; padding-left: 16px; font-weight: 700; vertical-align: top; background: #fafafa;">
+                                    Kelemahan Tata Kelola (X3)
+                                </td>
+                                <td rowspan="5" style="text-align: justify; vertical-align: top; line-height: 1.5; font-size: 0.85rem; padding-right: 12px; background: #fafafa;">
+                                    Kelemahan sistemik administrasi internal keuangan berupa ketidaktertiban pencatatan, sistem pendokumentasian bukti transaksi yang tidak lengkap, keterlambatan pelaporan, dan lemahnya pengawasan independen.
+                                </td>
+                                <td style="text-align: center; font-weight: 600;">X3.1</td>
+                                <td style="font-size: 0.85rem;">Pencatatan transaksi belum dilakukan secara tertib dan kronologis.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X3.2</td>
+                                <td style="font-size: 0.85rem;">Sistem pendokumentasian bukti transaksi seringkali tidak lengkap.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X3.3</td>
+                                <td style="font-size: 0.85rem;">Laporan pertanggungjawaban seringkali terlambat disajikan.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X3.4</td>
+                                <td style="font-size: 0.85rem;">Lemahnya fungsi pengawasan internal dalam BUMDesa.</td>
+                            </tr>
+                            <tr style="border-bottom: 2px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">X3.5</td>
+                                <td style="font-size: 0.85rem;">Tidak adanya pemisahan tugas yang jelas antara fungsi pelaksana dan fungsi keuangan.</td>
+                            </tr>
+
+                            <!-- Y -->
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td rowspan="5" style="text-align: left; padding-left: 16px; font-weight: 700; vertical-align: top; background: #fafafa;">
+                                    Kualitas Pelaporan (Y)
+                                </td>
+                                <td rowspan="5" style="text-align: justify; vertical-align: top; line-height: 1.5; font-size: 0.85rem; padding-right: 12px; background: #fafafa;">
+                                    Tingkat akuntabilitas keluaran pelaporan keuangan yang mencerminkan kondisi riil di lapangan, mudah dimengerti pada Musyawarah Desa (Musdes), dan dapat diverifikasi buktinya.
+                                </td>
+                                <td style="text-align: center; font-weight: 600;">Y.1</td>
+                                <td style="font-size: 0.85rem;">Laporan disajikan secara jujur dan sesuai dengan kondisi lapangan.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">Y.2</td>
+                                <td style="font-size: 0.85rem;">Informasi dalam laporan mudah dipahami oleh masyarakat luas (Musdes).</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">Y.3</td>
+                                <td style="font-size: 0.85rem;">Dana yang dikelola dapat dipertanggungjawabkan sesuai aturan yang berlaku.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">Y.4</td>
+                                <td style="font-size: 0.85rem;">Data yang disajikan konsisten dari satu periode ke periode berikutnya.</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="text-align: center; font-weight: 600;">Y.5</td>
+                                <td style="font-size: 0.85rem;">Laporan dapat diverifikasi kebenarannya melalui bukti-bukti yang ada.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="header" style="margin-top: 60px;">
+                <div>
+                    <h2>Uji Kualitas Instrumen</h2>
+                    <p style="color: var(--text-light);">Hasil pengujian Validitas (Pearson) dan Reliabilitas (Cronbach's Alpha).</p>
+                </div>
+            </div>
                 <div>
                     <h2>Uji Kualitas Instrumen</h2>
                     <p style="color: var(--text-light);">Hasil pengujian Validitas (Pearson) dan Reliabilitas (Cronbach's Alpha).</p>
@@ -523,53 +771,57 @@
 
             @if($regression)
                 <div class="regression-box">
-                    <div style="font-weight: 600; color: rgba(255,255,255,0.8); text-align: center; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;">Persamaan Regresi</div>
+                    <div style="font-weight: 600; color: rgba(255,255,255,0.8); text-align: center; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em;">Persamaan Regresi OLS</div>
                     <div class="formula-display">
-                        Y = {{ $regression['a'] }} 
-                        {{ $regression['b1'] >= 0 ? '+' : '' }} {{ $regression['b1'] }}X₁ 
-                        {{ $regression['b2'] >= 0 ? '+' : '' }} {{ $regression['b2'] }}X₂ 
-                        {{ $regression['b3'] >= 0 ? '+' : '' }} {{ $regression['b3'] }}X₃ 
+                        Y = {{ number_format($regression['a'], 4) }} 
+                        {{ $regression['b1'] >= 0 ? '+' : '' }} {{ number_format($regression['b1'], 4) }}X₁ 
+                        {{ $regression['b2'] >= 0 ? '+' : '' }} {{ number_format($regression['b2'], 4) }}X₂ 
+                        {{ $regression['b3'] >= 0 ? '+' : '' }} {{ number_format($regression['b3'], 4) }}X₃ 
                         + e
                     </div>
                     
                     <div class="coeff-grid">
                         <div class="coeff-item">
                             <div class="coeff-label">Konstanta (a)</div>
-                            <div class="coeff-value">{{ $regression['a'] }}</div>
+                            <div class="coeff-value">{{ number_format($regression['a'], 4) }}</div>
                             @if(isset($regression['t_a']))
                             <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
-                                SE: {{ $regression['se_a'] }} <br>
-                                t-hitung: {{ $regression['t_a'] }}
+                                SE: {{ number_format($regression['se_a'], 4) }} <br>
+                                t-hitung: {{ number_format($regression['t_a'], 4) }} <br>
+                                Sig.: {{ number_format($regression['p_a'], 5) }}
                             </div>
                             @endif
                         </div>
                         <div class="coeff-item">
-                            <div class="coeff-label">Koefisien X₁ (b₁)</div>
-                            <div class="coeff-value">{{ $regression['b1'] }}</div>
+                            <div class="coeff-label">Kapasitas X₁ (b₁)</div>
+                            <div class="coeff-value">{{ number_format($regression['b1'], 4) }}</div>
                             @if(isset($regression['t_b1']))
                             <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
-                                SE: {{ $regression['se_b1'] }} <br>
-                                t-hitung: {{ $regression['t_b1'] }}
+                                SE: {{ number_format($regression['se_b1'], 4) }} <br>
+                                t-hitung: {{ number_format($regression['t_b1'], 4) }} <br>
+                                Sig.: {{ number_format($regression['p_b1'], 5) }}
                             </div>
                             @endif
                         </div>
                         <div class="coeff-item">
-                            <div class="coeff-label">Koefisien X₂ (b₂)</div>
-                            <div class="coeff-value">{{ $regression['b2'] }}</div>
+                            <div class="coeff-label">Budaya X₂ (b₂)</div>
+                            <div class="coeff-value">{{ number_format($regression['b2'], 4) }}</div>
                             @if(isset($regression['t_b2']))
                             <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
-                                SE: {{ $regression['se_b2'] }} <br>
-                                t-hitung: {{ $regression['t_b2'] }}
+                                SE: {{ number_format($regression['se_b2'], 4) }} <br>
+                                t-hitung: {{ number_format($regression['t_b2'], 4) }} <br>
+                                Sig.: {{ number_format($regression['p_b2'], 5) }}
                             </div>
                             @endif
                         </div>
                         <div class="coeff-item">
-                            <div class="coeff-label">Koefisien X₃ (b₃)</div>
-                            <div class="coeff-value">{{ $regression['b3'] }}</div>
+                            <div class="coeff-label">Tata Kelola X₃ (b₃)</div>
+                            <div class="coeff-value">{{ number_format($regression['b3'], 4) }}</div>
                             @if(isset($regression['t_b3']))
                             <div style="font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px;">
-                                SE: {{ $regression['se_b3'] }} <br>
-                                t-hitung: {{ $regression['t_b3'] }}
+                                SE: {{ number_format($regression['se_b3'], 4) }} <br>
+                                t-hitung: {{ number_format($regression['t_b3'], 4) }} <br>
+                                Sig.: {{ number_format($regression['p_b3'], 5) }}
                             </div>
                             @endif
                         </div>
@@ -578,27 +830,215 @@
                     <div style="margin-top: 32px; display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap;">
                         <div style="background: rgba(255,255,255,0.15); padding: 12px 24px; border-radius: 12px; text-align: center;">
                             <span style="font-size: 0.8rem; color: rgba(255,255,255,0.7); display: block;">R-Squared (R²)</span>
-                            <span style="font-size: 1.5rem; font-weight: 700;">{{ $regression['r2'] }}</span>
+                            <span style="font-size: 1.5rem; font-weight: 700;">{{ number_format($regression['r2'], 4) }}</span>
                         </div>
                         @if(isset($regression['f_value']))
                         <div style="background: rgba(255,255,255,0.15); padding: 12px 24px; border-radius: 12px; text-align: center;">
                             <span style="font-size: 0.8rem; color: rgba(255,255,255,0.7); display: block;">F-hitung</span>
-                            <span style="font-size: 1.5rem; font-weight: 700;">{{ $regression['f_value'] }}</span>
+                            <span style="font-size: 1.5rem; font-weight: 700;">{{ number_format($regression['f_value'], 4) }}</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.15); padding: 12px 24px; border-radius: 12px; text-align: center;">
+                            <span style="font-size: 0.8rem; color: rgba(255,255,255,0.7); display: block;">Sig. F (Simultan)</span>
+                            <span style="font-size: 1.5rem; font-weight: 700;">{{ number_format($regression['p_f'], 5) }}</span>
                         </div>
                         @endif
-                        <div style="max-width: 400px; font-size: 0.85rem; color: rgba(255,255,255,0.8);">
-                            Nilai $R^2$ sebesar {{ $regression['r2'] }} menunjukkan bahwa variabel independen mampu menjelaskan {{ $regression['r2'] * 100 }}% variasi dari variabel dependen. @if(isset($regression['f_value'])) Nilai F-hitung menguji signifikansi pengaruh secara simultan. @endif
+                        <div style="max-width: 300px; font-size: 0.85rem; color: rgba(255,255,255,0.8); text-align: justify; line-height: 1.4;">
+                            Nilai $R^2$ sebesar {{ number_format($regression['r2'], 4) }} menunjukkan bahwa variabel independen mampu menjelaskan {{ number_format($regression['r2'] * 100, 2) }}% variasi Kualitas Pelaporan. Model simultan terbukti sangat signifikan (p-value < 0.05).
                         </div>
                     </div>
                 </div>
 
-                <div class="narration-box" style="margin-top: 24px;">
+                <div class="narration-box" style="margin-top: 24px; text-align: justify;">
                     <strong>Interpretasi Regresi Linear Berganda:</strong><br>
-                    Persamaan regresi menunjukkan nilai konstanta (a) sebesar {{ $regression['a'] }}.<br>
-                    Koefisien <strong>Kapasitas (X1)</strong> sebesar {{ $regression['b1'] }} menunjukkan bahwa peningkatan 1 satuan kapasitas akan {{ $regression['b1'] >= 0 ? 'meningkatkan' : 'menurunkan' }} kualitas pelaporan sebesar {{ abs($regression['b1']) }}.<br>
-                    Koefisien <strong>Budaya (X2)</strong> sebesar {{ $regression['b2'] }} berarti peningkatan 1 satuan tekanan budaya akan {{ $regression['b2'] >= 0 ? 'meningkatkan' : 'menurunkan' }} kualitas pelaporan sebesar {{ abs($regression['b2']) }}.<br>
-                    Koefisien <strong>Tata Kelola (X3)</strong> sebesar {{ $regression['b3'] }} berarti peningkatan 1 satuan kelemahan tata kelola akan {{ $regression['b3'] >= 0 ? 'meningkatkan' : 'menurunkan' }} kualitas pelaporan sebesar {{ abs($regression['b3']) }}.<br>
-                    Nilai R-Squared ({{ $regression['r2'] }}) mengindikasikan bahwa ketiga variabel independen secara simultan memengaruhi Kualitas Pelaporan sebesar {{ $regression['r2'] * 100 }}%.
+                    Persamaan regresi menunjukkan nilai konstanta (a) sebesar {{ number_format($regression['a'], 4) }}.<br>
+                    Koefisien <strong>Kapasitas (X1)</strong> sebesar {{ number_format($regression['b1'], 4) }} menunjukkan bahwa peningkatan 1 satuan kapasitas akan meningkatkan kualitas pelaporan sebesar {{ abs($regression['b1']) }}.<br>
+                    Koefisien <strong>Budaya (X2)</strong> sebesar {{ number_format($regression['b2'], 4) }} berarti peningkatan 1 satuan tekanan budaya akan menurunkan kualitas pelaporan sebesar {{ abs($regression['b2']) }}.<br>
+                    Koefisien <strong>Tata Kelola (X3)</strong> sebesar {{ number_format($regression['b3'], 4) }} berarti peningkatan 1 satuan kelemahan tata kelola akan menurunkan kualitas pelaporan sebesar {{ abs($regression['b3']) }}.<br>
+                    Nilai R-Squared ({{ number_format($regression['r2'], 4) }}) mengindikasikan bahwa ketiga variabel independen secara simultan memengaruhi Kualitas Pelaporan sebesar {{ number_format($regression['r2'] * 100, 2) }}%.
+                </div>
+
+                <!-- Tabel Hasil Regresi Lengkap (Saran Perbaikan 1) -->
+                <div class="chart-card" style="margin-top: 32px; margin-bottom: 32px;">
+                    <h3 style="margin-bottom: 20px; border-left: 4px solid var(--primary); padding-left: 12px;">Tabel 3: Hasil Regresi Linear Berganda (Parameter Parsial)</h3>
+                    <p style="color: var(--text-light); font-size: 0.85rem; margin-top: -12px; margin-bottom: 20px;">Melampirkan nilai koefisien Unstandardized B, Standard Error (SE), Standardized Beta, t-hitung, dan tingkat signifikansi p-value untuk setiap parameter.</p>
+                    <div style="overflow-x: auto;">
+                        <table class="table-stats" style="margin-top: 0; text-align: center;">
+                            <thead>
+                                <tr style="background: #f8fafc;">
+                                    <th style="text-align: left; padding-left: 16px; width: 35%;">Variabel Independen</th>
+                                    <th>Koefisien B (Unstandardized)</th>
+                                    <th>Standard Error (SE)</th>
+                                    <th>Standardized Beta (Beta)</th>
+                                    <th>Nilai t-hitung</th>
+                                    <th>p-value (Sig.)</th>
+                                    <th>Kesimpulan Statistik</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                    <td style="text-align: left; padding-left: 16px; font-weight: 600;">(Konstanta)</td>
+                                    <td>{{ number_format($regression['a'], 4) }}</td>
+                                    <td>{{ number_format($regression['se_a'], 4) }}</td>
+                                    <td>-</td>
+                                    <td>{{ number_format($regression['t_a'], 4) }}</td>
+                                    <td style="font-weight: 700; color: var(--primary);">{{ number_format($regression['p_a'], 5) }}</td>
+                                    <td><span class="badge-success">Signifikan (p &lt; 0.05)</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                    <td style="text-align: left; padding-left: 16px; font-weight: 600;">Kapasitas Manajerial (X1)</td>
+                                    <td>{{ number_format($regression['b1'], 4) }}</td>
+                                    <td>{{ number_format($regression['se_b1'], 4) }}</td>
+                                    <td>{{ number_format($regression['beta1'], 4) }}</td>
+                                    <td>{{ number_format($regression['t_b1'], 4) }}</td>
+                                    <td style="font-weight: 700; color: var(--primary);">{{ number_format($regression['p_b1'], 5) }}</td>
+                                    <td>
+                                        @if($regression['p_b1'] < 0.05)
+                                            <span class="badge-success">Signifikan (H2 Didukung)</span>
+                                        @else
+                                            <span class="badge-danger">Tidak Signifikan</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                    <td style="text-align: left; padding-left: 16px; font-weight: 600;">Tekanan Budaya Relasional (X2)</td>
+                                    <td>{{ number_format($regression['b2'], 4) }}</td>
+                                    <td>{{ number_format($regression['se_b2'], 4) }}</td>
+                                    <td>{{ number_format($regression['beta2'], 4) }}</td>
+                                    <td>{{ number_format($regression['t_b2'], 4) }}</td>
+                                    <td style="font-weight: 700; color: var(--primary);">{{ number_format($regression['p_b2'], 5) }}</td>
+                                    <td>
+                                        @if($regression['p_b2'] < 0.05)
+                                            <span class="badge-success">Signifikan (H3 Didukung)</span>
+                                        @else
+                                            <span class="badge-danger" style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">Tidak Signifikan (H3 Tidak Didukung)</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                    <td style="text-align: left; padding-left: 16px; font-weight: 600;">Kelemahan Tata Kelola (X3)</td>
+                                    <td>{{ number_format($regression['b3'], 4) }}</td>
+                                    <td>{{ number_format($regression['se_b3'], 4) }}</td>
+                                    <td>{{ number_format($regression['beta3'], 4) }}</td>
+                                    <td>{{ number_format($regression['t_b3'], 4) }}</td>
+                                    <td style="font-weight: 700; color: var(--primary);">{{ number_format($regression['p_b3'], 5) }}</td>
+                                    <td>
+                                        @if($regression['p_b3'] < 0.05)
+                                            <span class="badge-success">Signifikan (H4 Didukung)</span>
+                                        @else
+                                            <span class="badge-danger">Tidak Signifikan</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Rincian Perhitungan Matematis OLS Accordion (Tampilkan Perhitungan) -->
+                <div class="chart-card" style="margin-bottom: 32px; padding: 24px;">
+                    <details style="cursor: pointer;">
+                        <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); outline: none;">
+                            📂 Klik di Sini untuk Menampilkan Rincian Langkah Perhitungan Matematis OLS (Step-by-Step)
+                        </summary>
+                        <div style="margin-top: 20px; font-size: 0.85rem; line-height: 1.6; border-top: 1px solid var(--border); padding-top: 16px; color: var(--text);">
+                            <p style="margin-bottom: 16px;">Penyelesaian parameter estimasi regresi berganda dihitung secara internal menggunakan operasi matriks OLS:</p>
+                            <div style="text-align: center; margin: 15px 0; font-size: 1.15rem; font-weight: bold; color: var(--primary);">
+                                $\mathbf{b} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}$
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 20px;">
+                                <div>
+                                    <strong style="color: var(--primary);">1. Matriks $\mathbf{X}^T \mathbf{X}$ (Ukuran 4x4)</strong>
+                                    <p style="font-size: 0.75rem; color: var(--text-light); margin-top: 4px;">Merepresentasikan jumlahan kuadrat dan perkalian silang variabel independen:</p>
+                                    <table class="table-stats" style="width: auto; margin-top: 8px; font-family: monospace; font-size: 0.8rem; text-align: right;">
+                                        @foreach($regression['xtx'] as $row)
+                                        <tr>
+                                            @foreach($row as $val)
+                                            <td style="padding: 6px 10px; border: 1px solid var(--border); background: #f8fafc;">{{ number_format($val, 3) }}</td>
+                                            @endforeach
+                                        </tr>
+                                        @endforeach
+                                    </table>
+                                </div>
+                                
+                                <div>
+                                    <strong style="color: var(--primary);">2. Matriks Invers $(\mathbf{X}^T \mathbf{X})^{-1}$ (Ukuran 4x4)</strong>
+                                    <p style="font-size: 0.75rem; color: var(--text-light); margin-top: 4px;">Digunakan untuk memecahkan sistem linear koefisien:</p>
+                                    <table class="table-stats" style="width: auto; margin-top: 8px; font-family: monospace; font-size: 0.8rem; text-align: right;">
+                                        @if($regression['xtx_inv'])
+                                            @foreach($regression['xtx_inv'] as $row)
+                                            <tr>
+                                                @foreach($row as $val)
+                                                <td style="padding: 6px 10px; border: 1px solid var(--border); background: #f8fafc;">{{ number_format($val, 4) }}</td>
+                                                @endforeach
+                                            </tr>
+                                            @endforeach
+                                        @else
+                                            <tr><td style="color: var(--danger)">Matriks Singular (Inversi Gagal)</td></tr>
+                                        @endif
+                                    </table>
+                                </div>
+                                
+                                <div>
+                                    <strong style="color: var(--primary);">3. Vektor $\mathbf{X}^T \mathbf{y}$ (Ukuran 4x1)</strong>
+                                    <p style="font-size: 0.75rem; color: var(--text-light); margin-top: 4px;">Perkalian silang variabel independen dengan dependen:</p>
+                                    <table class="table-stats" style="width: auto; margin-top: 8px; font-family: monospace; font-size: 0.8rem; text-align: right;">
+                                        @foreach($regression['xty'] as $val)
+                                        <tr>
+                                            <td style="padding: 6px 10px; border: 1px solid var(--border); background: #f8fafc;">{{ number_format($val, 3) }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </table>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 24px; border-top: 1px dashed var(--border); padding-top: 16px;">
+                                <strong>4. Penguraian Variabilitas (Analysis of Variance / ANOVA Regresi):</strong>
+                                <table class="table-stats" style="margin-top: 8px; width: 100%; text-align: center;">
+                                    <thead>
+                                        <tr style="background: #f8fafc;">
+                                            <th style="text-align: left; padding-left: 12px;">Sumber Variasi</th>
+                                            <th>Sum of Squares (SS)</th>
+                                            <th>Degrees of Freedom (df)</th>
+                                            <th>Mean Square (MS)</th>
+                                            <th>F-hitung</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 12px; font-weight: 600;">Regression (Model)</td>
+                                            <td>{{ number_format($regression['ss_reg'], 4) }}</td>
+                                            <td>{{ $regression['df_reg'] }}</td>
+                                            <td>{{ number_format($regression['ms_reg'], 4) }}</td>
+                                            <td rowspan="2" style="vertical-align: middle; font-weight: bold; font-size: 1.2rem; color: var(--primary);">
+                                                {{ number_format($regression['f_value'], 4) }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align: left; padding-left: 12px; font-weight: 600;">Residual (Error)</td>
+                                            <td>{{ number_format($regression['ss_res'], 4) }}</td>
+                                            <td>{{ $regression['df_res'] }}</td>
+                                            <td>{{ number_format($regression['ms_res'], 4) }}</td>
+                                        </tr>
+                                        <tr style="background: #f1f5f9; font-weight: bold;">
+                                            <td style="text-align: left; padding-left: 12px;">Total (SSTot)</td>
+                                            <td>{{ number_format($regression['ss_tot'], 4) }}</td>
+                                            <td>{{ $regression['df_reg'] + $regression['df_res'] }}</td>
+                                            <td colspan="2">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div style="margin-top: 16px; font-size: 0.8rem; color: var(--text-light); background: #fffbeb; padding: 12px; border-left: 3px solid var(--accent); border-radius: 4px; line-height: 1.5;">
+                                <strong>Catatan Rumus Perhitungan:</strong><br>
+                                • Standard Error Koefisien $SE(b_i) = \sqrt{MS_{Res} \times (\mathbf{X}^T \mathbf{X})^{-1}_{ii}}$ <br>
+                                • Nilai t-hitung Parsial $t_i = \frac{b_i}{SE(b_i)}$ <br>
+                                • Nilai F-hitung Simultan $F = \frac{MS_{Reg}}{MS_{Res}}$ <br>
+                                • p-value diperoleh secara numerik menggunakan pecahan berlanjut fungsi logaritma Gamma & CDF Incomplete Beta untuk hasil presisi tinggi.
+                            </div>
+                        </div>
+                    </details>
                 </div>
 
                 @if(isset($regression['asumsi']))
@@ -725,77 +1165,141 @@
                 <div class="header" style="margin-top: 60px;">
                     <div>
                         <h2>Uji Hipotesis Penelitian</h2>
-                        <p style="color: var(--text-light);">Evaluasi rumusan hipotesis (H1-H4) berdasarkan arah dan nilai koefisien regresi.</p>
+                        <p style="color: var(--text-light);">Evaluasi rumusan hipotesis (H1-H4) berdasarkan arah dan signifikansi hasil statistik.</p>
                     </div>
                 </div>
 
                 <div class="chart-card" style="padding: 0; overflow: hidden;">
-                    <table class="table-stats" style="margin-top: 0;">
+                    <table class="table-stats" style="margin-top: 0; text-align: center;">
                         <thead style="background: #f8fafc;">
                             <tr>
                                 <th style="width: 5%;">Kode</th>
-                                <th style="width: 50%; text-align: left; padding-left: 20px;">Rumusan Hipotesis</th>
+                                <th style="width: 45%; text-align: left; padding-left: 20px;">Rumusan Hipotesis</th>
                                 <th style="width: 10%;">Arah</th>
-                                <th style="width: 15%;">Hasil Regresi</th>
-                                <th style="width: 20%;">Kesimpulan</th>
+                                <th style="width: 20%;">Hasil Regresi Parsial / Simultan</th>
+                                <th style="width: 20%;">Kesimpulan Hipotesis</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
                                 <td style="font-weight: 700;">H1</td>
-                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Kapasitas manajerial pengelola, tekanan budaya relasional lokal, dan kelemahan tata kelola keuangan secara simultan berpengaruh signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5; font-size: 0.85rem;">Kapasitas manajerial pengelola, tekanan budaya relasional lokal, dan kelemahan tata kelola keuangan secara simultan berpengaruh signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
                                 <td>Simultan</td>
-                                <td>$R^2$ = {{ $regression['r2'] }}</td>
+                                <td>F = {{ number_format($regression['f_value'], 4) }}<br><small style="color: var(--text-light);">Sig. F = {{ number_format($regression['p_f'], 5) }}</small></td>
                                 <td>
-                                    <span class="{{ $regression['r2'] > 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
-                                        {{ $regression['r2'] > 0 ? 'Terdukung' : 'Tidak Terdukung' }}
-                                    </span>
+                                    @if($regression['p_f'] < 0.05)
+                                        <span class="badge-success">Terdukung (Signifikan)</span>
+                                    @else
+                                        <span class="badge-danger">Tidak Terdukung</span>
+                                    @endif
                                 </td>
                             </tr>
-                            <tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
                                 <td style="font-weight: 700;">H2</td>
-                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Kapasitas manajerial pengelola berpengaruh positif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5; font-size: 0.85rem;">Kapasitas manajerial pengelola berpengaruh positif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
                                 <td>Positif</td>
-                                <td>$b_1$ = {{ $regression['b1'] }}</td>
+                                <td>b₁ = {{ number_format($regression['b1'], 4) }}<br><small style="color: var(--text-light);">Sig. t = {{ number_format($regression['p_b1'], 5) }}</small></td>
                                 <td>
-                                    <span class="{{ $regression['b1'] > 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
-                                        {{ $regression['b1'] > 0 ? 'Terdukung' : 'Tidak Terdukung' }}
-                                    </span>
+                                    @if($regression['b1'] > 0 && $regression['p_b1'] < 0.05)
+                                        <span class="badge-success">Terdukung (Signifikan)</span>
+                                    @else
+                                        <span class="badge-danger">Tidak Terdukung</span>
+                                    @endif
                                 </td>
                             </tr>
-                            <tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
                                 <td style="font-weight: 700;">H3</td>
-                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Tekanan budaya relasional lokal berpengaruh negatif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5; font-size: 0.85rem;">Tekanan budaya relasional lokal berpengaruh negatif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
                                 <td>Negatif</td>
-                                <td>$b_2$ = {{ $regression['b2'] }}</td>
+                                <td>b₂ = {{ number_format($regression['b2'], 4) }}<br><small style="color: var(--text-light);">Sig. t = {{ number_format($regression['p_b2'], 5) }}</small></td>
                                 <td>
-                                    <span class="{{ $regression['b2'] < 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
-                                        {{ $regression['b2'] < 0 ? 'Terdukung' : 'Tidak Terdukung' }}
-                                    </span>
+                                    @if($regression['b2'] < 0 && $regression['p_b2'] < 0.05)
+                                        <span class="badge-success">Terdukung (Signifikan)</span>
+                                    @else
+                                        <span class="badge-danger" style="background: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 6px; font-weight: 600; font-size: 0.75rem;">Tidak Terdukung (Tidak Signifikan)</span>
+                                    @endif
                                 </td>
                             </tr>
-                            <tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
                                 <td style="font-weight: 700;">H4</td>
-                                <td style="text-align: left; padding-left: 20px; line-height: 1.5;">Kelemahan tata kelola keuangan berpengaruh negatif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
+                                <td style="text-align: left; padding-left: 20px; line-height: 1.5; font-size: 0.85rem;">Kelemahan tata kelola keuangan berpengaruh negatif dan signifikan terhadap kualitas implementasi pelaporan keuangan BUMDesa.</td>
                                 <td>Negatif</td>
-                                <td>$b_3$ = {{ $regression['b3'] }}</td>
+                                <td>b₃ = {{ number_format($regression['b3'], 4) }}<br><small style="color: var(--text-light);">Sig. t = {{ number_format($regression['p_b3'], 5) }}</small></td>
                                 <td>
-                                    <span class="{{ $regression['b3'] < 0 ? 'badge-success' : 'badge-danger' }}" style="display: inline-block;">
-                                        {{ $regression['b3'] < 0 ? 'Terdukung' : 'Tidak Terdukung' }}
-                                    </span>
+                                    @if($regression['b3'] < 0 && $regression['p_b3'] < 0.05)
+                                        <span class="badge-success">Terdukung (Signifikan)</span>
+                                    @else
+                                        <span class="badge-danger">Tidak Terdukung</span>
+                                    @endif
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="narration-box" style="margin-top: 16px;">
-                    <strong>Interpretasi Uji Hipotesis:</strong><br>
-                    <strong>H1 (Simultan):</strong> Nilai $R^2$ sebesar {{ $regression['r2'] }} menunjukkan bahwa ketiga variabel independen secara bersama-sama memengaruhi Kualitas Pelaporan (Y), sehingga hipotesis <strong>{{ $regression['r2'] > 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
-                    <strong>H2 (Parsial X1):</strong> Koefisien $b_1$ bernilai {{ $regression['b1'] }}. Arah koefisien ini <strong>{{ $regression['b1'] > 0 ? 'positif (searah)' : 'negatif (berlawanan)' }}</strong> dengan hipotesis awal, sehingga H2 <strong>{{ $regression['b1'] > 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
-                    <strong>H3 (Parsial X2):</strong> Koefisien $b_2$ bernilai {{ $regression['b2'] }}. Arah koefisien ini <strong>{{ $regression['b2'] < 0 ? 'negatif (searah)' : 'positif (berlawanan)' }}</strong> dengan hipotesis awal, sehingga H3 <strong>{{ $regression['b2'] < 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
-                    <strong>H4 (Parsial X3):</strong> Koefisien $b_3$ bernilai {{ $regression['b3'] }}. Arah koefisien ini <strong>{{ $regression['b3'] < 0 ? 'negatif (searah)' : 'positif (berlawanan)' }}</strong> dengan hipotesis awal, sehingga H4 <strong>{{ $regression['b3'] < 0 ? 'terdukung' : 'tidak terdukung' }}</strong>.<br>
-                    <span style="font-size: 0.8rem; color: var(--text-light); margin-top: 8px; display: block;"><em>*Catatan: Kesimpulan "Terdukung/Tidak Terdukung" ditarik murni berdasarkan perbandingan arah koefisien prediksi dengan arah hipotesis.</em></span>
+                <div class="narration-box" style="margin-top: 16px; background: #f0fdf4; border-left: 4px solid var(--secondary); text-align: justify; line-height: 1.5;">
+                    <strong>Interpretasi Uji Hipotesis (Berdasarkan Nilai-p &amp; Signifikansi Statistik):</strong>
+                    <ul style="margin: 8px 0 0 16px; padding: 0;">
+                        <li style="margin-bottom: 6px;">
+                            <strong>H1 (Simultan):</strong> Model regresi terbukti sangat signifikan ($F = {{ number_format($regression['f_value'], 3) }}$, $p = {{ number_format($regression['p_f'], 5) }} {{ $regression['p_f'] < 0.05 ? '< 0.05' : '>= 0.05' }}$). Artinya secara simultan Kapasitas Manajerial, Tekanan Budaya Relasional, dan Kelemahan Tata Kelola berpengaruh signifikan terhadap Kualitas Implementasi Pelaporan Keuangan BUMDesa. 
+                            <strong>Hipotesis H1 {{ $regression['p_f'] < 0.05 ? 'Didukung' : 'Tidak Didukung' }} secara Statistik.</strong>
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>H2 (Parsial X1):</strong> Kapasitas Manajerial berpengaruh positif dan {{ $regression['p_b1'] < 0.05 ? 'signifikan' : 'tidak signifikan' }} ($b_1 = {{ number_format($regression['b1'], 4) }}$, $t = {{ number_format($regression['t_b1'], 3) }}$, $p = {{ number_format($regression['p_b1'], 5) }} {{ $regression['p_b1'] < 0.05 ? '< 0.05' : '>= 0.05' }}$). 
+                            @if($regression['b1'] > 0 && $regression['p_b1'] < 0.05)
+                                Hal ini menunjukkan peningkatan kapasitas manajerial pengelola secara nyata akan meningkatkan kualitas pelaporan keuangan. <strong>Hipotesis H2 Didukung.</strong>
+                            @else
+                                Hal ini menunjukkan bahwa peningkatan kapasitas manajerial tidak terbukti secara nyata meningkatkan kualitas pelaporan keuangan pada tingkat signifikansi yang dipilih. <strong>Hipotesis H2 Tidak Didukung.</strong>
+                            @endif
+                        </li>
+                        <li style="margin-bottom: 6px;">
+                            <strong>H3 (Parsial X2):</strong> Tekanan Budaya Relasional memiliki koefisien $b_2 = {{ number_format($regression['b2'], 4) }}$ ($t = {{ number_format($regression['t_b2'], 3) }}$, $p = {{ number_format($regression['p_b2'], 5) }} {{ $regression['p_b2'] < 0.05 ? '< 0.05' : '>= 0.05' }}$). 
+                            @if($regression['b2'] < 0 && $regression['p_b2'] < 0.05)
+                                Hal ini menunjukkan bahwa tekanan budaya relasional yang tinggi secara signifikan menghambat kualitas pelaporan keuangan. <strong>Hipotesis H3 Didukung.</strong>
+                            @else
+                                Dengan demikian, klaim bahwa tekanan budaya relasional secara signifikan menghambat pelaporan keuangan tidak terbukti secara statistik pada sampel ini. <strong>Hipotesis H3 Tidak Didukung.</strong>
+                            @endif
+                        </li>
+                        <li style="margin-bottom: 0;">
+                            <strong>H4 (Parsial X3):</strong> Kelemahan Tata Kelola Keuangan memiliki koefisien $b_3 = {{ number_format($regression['b3'], 4) }}$ ($t = {{ number_format($regression['t_b3'], 3) }}$, $p = {{ number_format($regression['p_b3'], 5) }} {{ $regression['p_b3'] < 0.05 ? '< 0.05' : '>= 0.05' }}$). 
+                            @if($regression['b3'] < 0 && $regression['p_b3'] < 0.05)
+                                Ini membuktikan secara kuat bahwa kelemahan tata pamong internal (seperti ketiadaan bukti transaksi dan keterlambatan LPJ) secara langsung menurunkan kualitas pelaporan keuangan. <strong>Hipotesis H4 Didukung.</strong>
+                            @else
+                                Hal ini menunjukkan bahwa kelemahan tata pamong internal tidak terbukti secara signifikan menurunkan kualitas pelaporan keuangan pada sampel ini. <strong>Hipotesis H4 Tidak Didukung.</strong>
+                            @endif
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="chart-card" style="margin-top: 24px; padding: 24px; border-left: 4px solid var(--accent); background: #fffbeb;">
+                    <h3 style="margin-top: 0; font-size: 1.1rem; color: #b45309; border-left: none; padding-left: 0;">💡 Diskusi Temuan Kualitatif: Analisis Pengaruh Budaya Relasional (X2) &amp; Tata Kelola (X3)</h3>
+                    <p style="font-size: 0.9rem; line-height: 1.6; color: #78350f; text-align: justify; margin-bottom: 12px;">
+                        Berdasarkan hasil regresi saat ini, pengaruh <strong>Tekanan Budaya Relasional (X2)</strong> adalah $b_2 = {{ number_format($regression['b2'], 4) }}$ dengan signifikansi $p = {{ number_format($regression['p_b2'], 5) }}$ (<strong>{{ $regression['p_b2'] < 0.05 ? 'Signifikan' : 'Tidak Signifikan' }}</strong>), sedangkan pengaruh <strong>Kelemahan Tata Kelola (X3)</strong> adalah $b_3 = {{ number_format($regression['b3'], 4) }}$ dengan signifikansi $p = {{ number_format($regression['p_b3'], 5) }}$ (<strong>{{ $regression['p_b3'] < 0.05 ? 'Signifikan' : 'Tidak Signifikan' }}</strong>). Dinamika hubungan ini dianalisis lebih lanjut menggunakan temuan kualitatif di desa:
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+                        <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid #fde68a;">
+                            <strong style="color: #b45309; font-size: 0.95rem;">Hubungan Relasional Sosial Pedesaan</strong>
+                            <p style="font-size: 0.85rem; line-height: 1.5; color: #92400e; margin-top: 6px; text-align: justify;">
+                                Relasi kekeluargaan di pedesaan sering berfungsi ganda. Di satu sisi, relasi yang terlalu erat dapat menimbulkan konflik kepentingan. Namun, di sisi lain, budaya gotong royong dan keterbukaan sosial desa memfasilitasi komunikasi informal yang efektif untuk menyelesaikan kendala administrasi pembukuan tanpa terhambat kekakuan prosedur birokrasi.
+                            </p>
+                        </div>
+                        
+                        <div style="background: white; padding: 16px; border-radius: 12px; border: 1px solid #fde68a;">
+                            <strong style="color: #b45309; font-size: 0.95rem;">Standarisasi &amp; Antisipasi Tata Kelola</strong>
+                            <p style="font-size: 0.85rem; line-height: 1.5; color: #92400e; margin-top: 6px; text-align: justify;">
+                                Pengelola BUMDesa yang memiliki kapasitas tinggi cenderung mampu mengantisipasi kelemahan tata kelola internal. Standardisasi prosedur pembukuan yang mulai diperkenalkan oleh pendamping desa membantu meminimalkan dampak buruk dari kelemahan fungsi kontrol internal sehingga menjaga kualitas implementasi pelaporan keuangan.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 16px; background: rgba(255,255,255,0.7); padding: 16px; border-radius: 12px; border: 1px dashed #fde68a;">
+                        <strong style="color: #b45309; font-size: 0.9rem; display: block; margin-bottom: 8px;">💬 Catatan Temuan Kualitatif Responden (Ekstraksi Kuesioner):</strong>
+                        <blockquote style="font-style: italic; font-size: 0.85rem; color: #92400e; margin: 0; padding-left: 12px; border-left: 2px solid #b45309; line-height: 1.5;">
+                            "Budaya kekeluargaan di desa justru membantu mempercepat pengambilan keputusan gotong royong jika ada masalah administrasi keuangan."<br>
+                            "Masyarakat desa aktif mengawasi secara sosial, sehingga tuntutan transparansi relasional justru memaksa pengelola untuk melaporkan dana secara jujur."
+                        </blockquote>
+                    </div>
                 </div>
             @else
                 <div class="chart-card" style="text-align: center; padding: 40px;">

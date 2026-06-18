@@ -357,6 +357,7 @@
         </a>
         <div class="nav-links">
             <a href="#panduan">Panduan</a>
+            <a href="{{ route('admin.analysis') }}">Analisis</a>
             @auth
                 @if(auth()->user()->role === 'superadmin' || auth()->user()->role === 'interviewer')
                     <a href="{{ route('admin.dashboard') }}">Admin Panel</a>

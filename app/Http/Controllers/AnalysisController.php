@@ -17,7 +17,16 @@ class AnalysisController extends Controller
             return view('admin.analysis', ['isEmpty' => true]);
         }
 
-        // Calculate Averages for each instrument group
+        // Calculate composite scores for each respondent
+        $x1Arr = []; $x2Arr = []; $x3Arr = []; $yArr = [];
+        foreach ($data as $r) {
+            $x1Arr[] = ($r->x1_1 + $r->x1_2 + $r->x1_3 + $r->x1_4 + $r->x1_5) / 5;
+            $x2Arr[] = ($r->x2_1 + $r->x2_2 + $r->x2_3 + $r->x2_4 + $r->x2_5) / 5;
+            $x3Arr[] = ($r->x3_1 + $r->x3_2 + $r->x3_3 + $r->x3_4 + $r->x3_5) / 5;
+            $yArr[]  = ($r->y1 + $r->y2 + $r->y3 + $r->y4 + $r->y5) / 5;
+        }
+
+        // Calculate Averages for each instrument group (keep for backward compatibility)
         $stats = [
             'x1' => $this->avgItems($data, 'x1_', 5),
             'x2' => $this->avgItems($data, 'x2_', 5),
@@ -33,17 +42,17 @@ class AnalysisController extends Controller
             'y'  => round(collect($stats['y'])->avg(), 2),
         ];
 
-        // --- Uji Kualitas Instrumen (Validitas & Reliabilitas) ---
-        $quality = [
-            'validity' => [],
-            'reliability' => []
-        ];
-
         $vars = [
             'x1' => ['prefix' => 'x1_', 'count' => 5, 'label' => 'Kapasitas Manajerial (X1)'],
             'x2' => ['prefix' => 'x2_', 'count' => 5, 'label' => 'Tekanan Budaya (X2)'],
             'x3' => ['prefix' => 'x3_', 'count' => 5, 'label' => 'Kelemahan Tata Kelola (X3)'],
             'y'  => ['prefix' => 'y',   'count' => 5, 'label' => 'Kualitas Pelaporan (Y)']
+        ];
+
+        // --- Uji Kualitas Instrumen (Validitas & Reliabilitas) ---
+        $quality = [
+            'validity' => [],
+            'reliability' => []
         ];
 
         foreach ($vars as $key => $v) {
@@ -76,14 +85,27 @@ class AnalysisController extends Controller
         // Y = a + b1X1 + b2X2 + b3X3
         $regression = null;
         if ($totalRespondents > 3) {
-            $x1Arr = []; $x2Arr = []; $x3Arr = []; $yArr = [];
-            foreach ($data as $r) {
-                $x1Arr[] = ($r->x1_1 + $r->x1_2 + $r->x1_3 + $r->x1_4 + $r->x1_5) / 5;
-                $x2Arr[] = ($r->x2_1 + $r->x2_2 + $r->x2_3 + $r->x2_4 + $r->x2_5) / 5;
-                $x3Arr[] = ($r->x3_1 + $r->x3_2 + $r->x3_3 + $r->x3_4 + $r->x3_5) / 5;
-                $yArr[]  = ($r->y1 + $r->y2 + $r->y3 + $r->y4 + $r->y5) / 5;
-            }
             $regression = $this->calculateMultipleRegression($x1Arr, $x2Arr, $x3Arr, $yArr);
+        }
+
+        // --- Statistik Deskriptif (Lengkap dengan N, Mean, Std Dev, Min, Max) ---
+        $descriptive = [
+            'variables' => [
+                'x1' => $this->calculateDescriptiveStats($x1Arr),
+                'x2' => $this->calculateDescriptiveStats($x2Arr),
+                'x3' => $this->calculateDescriptiveStats($x3Arr),
+                'y'  => $this->calculateDescriptiveStats($yArr),
+            ],
+            'items' => []
+        ];
+
+        foreach ($vars as $key => $v) {
+            $descriptive['items'][$key] = [];
+            for ($i = 1; $i <= $v['count']; $i++) {
+                $col = ($v['prefix'] === 'y' ? 'y' : $v['prefix']) . $i;
+                $scores = $data->pluck($col)->toArray();
+                $descriptive['items'][$key]["Butir $i"] = $this->calculateDescriptiveStats($scores);
+            }
         }
 
         // Distribution data (existing)
@@ -94,7 +116,7 @@ class AnalysisController extends Controller
         $byAplikasi = Kuesioner::select('menggunakan_aplikasi', DB::raw('count(*) as count'))->groupBy('menggunakan_aplikasi')->pluck('count', 'menggunakan_aplikasi');
         $byFrekuensi = Kuesioner::select('frekuensi_pelatihan', DB::raw('count(*) as count'))->whereNotNull('frekuensi_pelatihan')->groupBy('frekuensi_pelatihan')->pluck('count', 'frekuensi_pelatihan');
 
-        return view('admin.analysis', compact('stats', 'averages', 'totalRespondents', 'byKabupaten', 'byJabatan', 'byPendidikan', 'quality', 'regression', 'byPelatihan', 'byAplikasi', 'byFrekuensi'));
+        return view('admin.analysis', compact('stats', 'averages', 'totalRespondents', 'byKabupaten', 'byJabatan', 'byPendidikan', 'quality', 'regression', 'byPelatihan', 'byAplikasi', 'byFrekuensi', 'descriptive'));
     }
 
     private function avgItems($collection, $prefix, $count)
@@ -136,6 +158,27 @@ class AnalysisController extends Controller
         $sumSq = 0;
         foreach ($data as $v) $sumSq += ($v - $mean) ** 2;
         return $sumSq / ($n - 1);
+    }
+
+    private function calculateDescriptiveStats($scores)
+    {
+        $n = count($scores);
+        if ($n === 0) {
+            return ['n' => 0, 'mean' => 0, 'std_dev' => 0, 'min' => 0, 'max' => 0];
+        }
+        $min = min($scores);
+        $max = max($scores);
+        $mean = array_sum($scores) / $n;
+        $variance = $this->calculateVariance($scores);
+        $stdDev = sqrt($variance);
+
+        return [
+            'n' => $n,
+            'mean' => round($mean, 4),
+            'std_dev' => round($stdDev, 4),
+            'min' => round($min, 4),
+            'max' => round($max, 4)
+        ];
     }
 
     private function calculateCronbachAlpha($itemMatrix, $totalScores)
@@ -267,33 +310,46 @@ class AnalysisController extends Controller
         }
         $rSquared = $ssTot == 0 ? 0 : 1 - ($ssRes / $ssTot);
 
-        // --- Tambahan Uji F, Uji t, dan Standard Error ---
+        // --- Uji F, Uji t, Standard Error, dan p-value ---
         $p = 4; // Jumlah parameter (1 konstanta + 3 variabel independen)
         $k = 3; // Jumlah variabel independen
         
         $fValue = 0;
+        $p_f = 1.0;
         $se = array_fill(0, $p, 0);
         $t = array_fill(0, $p, 0);
+        $p_t = array_fill(0, $p, 1.0);
+        
+        $df_reg = $k;
+        $df_res = $n - $p;
+        $ssReg = $ssTot - $ssRes;
+        $msReg = $ssReg / $df_reg;
+        $msRes = $df_res > 0 ? $ssRes / $df_res : 0;
 
-        // Hanya bisa dihitung jika df residual > 0 (jumlah sampel > jumlah parameter)
-        if ($n > $p) {
-            $ssReg = $ssTot - $ssRes;
-            $msReg = $ssReg / $k;
-            $msRes = $ssRes / ($n - $p);
-            
+        // Standardized Beta Coefficients
+        $sdX1 = sqrt($this->calculateVariance($x1));
+        $sdX2 = sqrt($this->calculateVariance($x2));
+        $sdX3 = sqrt($this->calculateVariance($x3));
+        $sdY  = sqrt($this->calculateVariance($y));
+        
+        $beta1 = $sdY > 0 ? $b[1] * ($sdX1 / $sdY) : 0;
+        $beta2 = $sdY > 0 ? $b[2] * ($sdX2 / $sdY) : 0;
+        $beta3 = $sdY > 0 ? $b[3] * ($sdX3 / $sdY) : 0;
+
+        // Invers dari (X'X) untuk mendapatkan varians-kovarians koefisien
+        $XTX_inv = $this->invertMatrix($XTX);
+
+        if ($df_res > 0) {
             // Uji F
             $fValue = $msRes > 0 ? $msReg / $msRes : 0;
+            $p_f = $this->fProbability($fValue, $df_reg, $df_res);
 
-            // Invers dari (X'X) untuk mendapatkan varians-kovarians koefisien
-            $XTX_inv = $this->invertMatrix($XTX);
-            
             if ($XTX_inv) {
                 for ($i = 0; $i < $p; $i++) {
                     $var_coef = $msRes * $XTX_inv[$i][$i];
-                    // Standard Error (SE)
                     $se[$i] = $var_coef > 0 ? sqrt($var_coef) : 0;
-                    // Uji t (t-hitung)
                     $t[$i]  = $se[$i] > 0 ? $b[$i] / $se[$i] : 0;
+                    $p_t[$i] = $this->tProbability(abs($t[$i]), $df_res);
                 }
             }
         }
@@ -305,15 +361,128 @@ class AnalysisController extends Controller
             'b3' => round($b[3], 4),
             'r2' => round($rSquared, 4),
             'f_value' => round($fValue, 4),
+            'p_f'     => round($p_f, 5),
+            
             'se_a'  => round($se[0], 4),
             'se_b1' => round($se[1], 4),
             'se_b2' => round($se[2], 4),
             'se_b3' => round($se[3], 4),
+            
             't_a'  => round($t[0], 4),
             't_b1' => round($t[1], 4),
             't_b2' => round($t[2], 4),
             't_b3' => round($t[3], 4),
+            
+            'p_a'  => round($p_t[0], 5),
+            'p_b1' => round($p_t[1], 5),
+            'p_b2' => round($p_t[2], 5),
+            'p_b3' => round($p_t[3], 5),
+            
+            'beta1' => round($beta1, 4),
+            'beta2' => round($beta2, 4),
+            'beta3' => round($beta3, 4),
+            
+            // Rincian langkah perhitungan OLS (untuk UI)
+            'n' => $n,
+            'df_reg' => $df_reg,
+            'df_res' => $df_res,
+            'ss_tot' => round($ssTot, 4),
+            'ss_res' => round($ssRes, 4),
+            'ss_reg' => round($ssReg, 4),
+            'ms_reg' => round($msReg, 4),
+            'ms_res' => round($msRes, 4),
+            'xtx' => $XTX,
+            'xty' => $XTy,
+            'xtx_inv' => $XTX_inv
         ];
+    }
+
+    // --- Mathematical Probability Helpers (Lanczos & Lentz Method) ---
+
+    private function logGamma($x)
+    {
+        $cof = [
+            76.18009172947146,  -86.50532032941677,
+            24.01409824083091,  -1.231739572450155,
+            0.1208650973866179e-2, -0.5395239384953e-5
+        ];
+        $y = $x;
+        $tmp = $x + 5.5;
+        $tmp -= ($x + 0.5) * log($tmp);
+        $ser = 1.000000000190015;
+        for ($j = 0; $j <= 5; $j++) {
+            $y++;
+            $ser += $cof[$j] / $y;
+        }
+        return -$tmp + log(2.5066282746310005 * $ser / $x);
+    }
+
+    private function betaCF($x, $a, $b)
+    {
+        $max_iter = 200;
+        $epsilon = 3e-7;
+        $qab = $a + $b;
+        $qap = $a + 1.0;
+        $qam = $a - 1.0;
+        $c = 1.0;
+        $d = 1.0 - $qab * $x / $qap;
+        if (abs($d) < 1e-30) $d = 1e-30;
+        $d = 1.0 / $d;
+        $h = $d;
+        for ($m = 1; $m <= $max_iter; $m++) {
+            $m2 = 2 * $m;
+            // Even step
+            $aa = $m * ($b - $m) * $x / (($qam + $m2) * ($a + $m2));
+            $d = 1.0 + $aa * $d;
+            if (abs($d) < 1e-30) $d = 1e-30;
+            $c = 1.0 + $aa / $c;
+            if (abs($c) < 1e-30) $c = 1e-30;
+            $d = 1.0 / $d;
+            $h *= $d * $c;
+            
+            // Odd step
+            $aa = -($a + $m) * ($qab + $m) * $x / (($a + $m2) * ($qap + $m2));
+            $d = 1.0 + $aa * $d;
+            if (abs($d) < 1e-30) $d = 1e-30;
+            $c = 1.0 + $aa / $c;
+            if (abs($c) < 1e-30) $c = 1e-30;
+            $d = 1.0 / $d;
+            $del = $d * $c;
+            $h *= $del;
+            if (abs($del - 1.0) < $epsilon) break;
+        }
+        return $h;
+    }
+
+    private function betaCDF($x, $a, $b)
+    {
+        if ($x < 0.0 || $x > 1.0) return 0.0;
+        if ($x == 0.0) return 0.0;
+        if ($x == 1.0) return 1.0;
+        
+        $bt = exp($this->logGamma($a + $b) - $this->logGamma($a) - $this->logGamma($b) 
+                  + $a * log($x) + $b * log(1.0 - $x));
+                  
+        if ($x < ($a + 1.0) / ($a + $b + 2.0)) {
+            return $bt * $this->betaCF($x, $a, $b) / $a;
+        } else {
+            return 1.0 - $bt * $this->betaCF(1.0 - $x, $b, $a) / $b;
+        }
+    }
+
+    private function tProbability($t, $df)
+    {
+        if ($df <= 0) return 1.0;
+        $tSq = $t * $t;
+        $x = $df / ($df + $tSq);
+        return $this->betaCDF($x, $df / 2.0, 0.5);
+    }
+
+    private function fProbability($f, $df1, $df2)
+    {
+        if ($f <= 0 || $df1 <= 0 || $df2 <= 0) return 1.0;
+        $x = $df2 / ($df1 * $f + $df2);
+        return $this->betaCDF($x, $df2 / 2.0, $df1 / 2.0);
     }
 
     private function solveLinearSystem($A, $B)
